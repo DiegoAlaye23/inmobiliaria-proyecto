@@ -1,19 +1,21 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const Usuario = require('../models/usuario.model');
-const transporter = require('../config/mailer');
-const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt'); // Para hashear contraseñas
+const jwt = require('jsonwebtoken'); // Para generar tokens JWT
+const Usuario = require('../models/usuario.model'); // Modelo de base de datos para usuarios
+const transporter = require('../config/mailer'); // Configuración del servicio de envío de mails
+const { v4: uuidv4 } = require('uuid'); // Para generar tokens únicos de verificación
 
+// Clave secreta para firmar los JWT 
 const SECRET_KEY = 'secreto-super-seguro';
 
 // POST /api/usuarios/registro
 const registrarUsuario = async (req, res) => {
-  const { nombre, email, password, rol = 'usuario' } = req.body;
-
+  const { nombre, email, password, rol = 'usuario' } = req.body; // Obtenemos los datos del cuerpo de la solicitud
+  
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const tokenVerificacion = uuidv4();
+    const hashedPassword = await bcrypt.hash(password, 10); // Hasheamos la contraseña con 10 rondas de sal
+    const tokenVerificacion = uuidv4(); // Generamos un token único para verificar la cuenta
 
+    // Creamos el usuario en la base de datos
     Usuario.crearUsuario({
       nombre,
       email,
@@ -26,6 +28,7 @@ const registrarUsuario = async (req, res) => {
 
       const urlVerificacion = `http://localhost:3001/api/usuarios/verificar/${tokenVerificacion}`;
 
+      // Enviamos correo de verificación
       await transporter.sendMail({
         from: `"Inmobiliaria" <${process.env.EMAIL_USER}>`,
         to: email,
@@ -70,6 +73,7 @@ const loginUsuario = (req, res) => {
     const coincide = await bcrypt.compare(password, usuario.password);
     if (!coincide) return res.status(401).json({ error: 'Contraseña incorrecta' });
 
+    // Generamos el token con datos útiles del usuario
     const token = jwt.sign(
       { id: usuario.id, rol: usuario.rol, nombre: usuario.nombre },
       SECRET_KEY,

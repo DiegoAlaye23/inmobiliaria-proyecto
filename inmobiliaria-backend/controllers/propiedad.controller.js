@@ -16,6 +16,8 @@ const obtenerPropiedades = (req, res) => {
 // GET /api/propiedades/:id
 // Obtener una propiedad específica por ID
 const obtenerPropiedadPorId = (req, res) => {
+
+  //Toma el id desde la URL
   const id = req.params.id;
 
   Propiedad.getPropiedadPorId(id, (err, resultados) => {
@@ -33,11 +35,14 @@ const obtenerPropiedadPorId = (req, res) => {
 // POST /api/propiedades
 // Crear una nueva propiedad
 const crearPropiedad = (req, res) => {
+  //req.body contiene los datos del formulario.
   const nuevaPropiedad = req.body;
+  //req.file (proporcionado por Multer) contiene la imagen subida.
   const imagen = req.file ? req.file.filename : '';
-
+  //Guarda el nombre de la imagen como imagen_destacada dentro de la propiedad
    nuevaPropiedad.imagen_destacada = imagen;
 
+   //Llama al modelo para guardar la nueva propiedad.
   Propiedad.crearPropiedad(nuevaPropiedad, (err, resultado) => {
     if (err) {
       console.error(err);
@@ -45,6 +50,7 @@ const crearPropiedad = (req, res) => {
     } else {
       res.status(201).json({
         mensaje: "Propiedad creada correctamente",
+        //Si se guarda bien, devuelve el ID del nuevo registro.
         id: resultado.insertId,
       });
     }
@@ -54,9 +60,12 @@ const crearPropiedad = (req, res) => {
 // PUT /api/propiedades/:id
 // Actualizar una propiedad existente
 const actualizarPropiedad = (req, res) => {
+  //Obtiene el id desde la URL
   const id = req.params.id;
+  //Recibe datos nuevos desde el frontend (req.body)
   const datosActualizados = req.body;
 
+  //Si el usuario envía una nueva imagen, la reemplaza.
   if (req.file) {
     datosActualizados.imagen_destacada = req.file.filename;
   }

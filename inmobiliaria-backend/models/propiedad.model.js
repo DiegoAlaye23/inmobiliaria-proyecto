@@ -78,7 +78,7 @@ const actualizarPropiedad = (id, data, callback) => {
     data.cochera,
     data.m2,
     data.imagen_destacada || '',
-    (new Date(data.fecha_publicacion)).toISOString().slice(0, 10),
+    (new Date(data.fecha_publicacion)).toISOString().slice(0, 10), //toISOString().slice(0, 10) convierte la fecha a formato YYYY-MM-DD
     id
   ];
 

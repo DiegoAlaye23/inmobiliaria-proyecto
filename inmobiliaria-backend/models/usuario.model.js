@@ -1,6 +1,7 @@
+// Importamos la conexión a la base de datos desde config/db.js
 const db = require('../config/db');
 
-// Crear nuevo usuario (registro o admin)
+// Crea un nuevo usuario (rol usuario o admin) en la base de datos
 const crearUsuario = (usuario, callback) => {
   const sql = `
     INSERT INTO usuarios (nombre, email, password, rol, verificado, token_verificacion)
@@ -9,45 +10,45 @@ const crearUsuario = (usuario, callback) => {
   const valores = [
     usuario.nombre,
     usuario.email,
-    usuario.password,
-    usuario.rol || 'usuario',
-    usuario.verificado || false,
-    usuario.token_verificacion || null
+    usuario.password, // ya viene hasheada con bcrypt
+    usuario.rol || 'usuario', // por defecto es 'usuario'
+    usuario.verificado || false, // no verificado por defecto
+    usuario.token_verificacion || null // token único (uuid)
   ];
-  db.query(sql, valores, callback);
+  db.query(sql, valores, callback); // ejecutamos la consulta
 };
 
-// Buscar por email
+// Busca un usuario por su email (para login)
 const buscarPorEmail = (email, callback) => {
   const sql = 'SELECT * FROM usuarios WHERE email = ?';
   db.query(sql, [email], callback);
 };
 
-// Buscar por token de verificación
+// Busca un usuario por el token que se le mandó por mail
 const buscarPorTokenVerificacion = (token, callback) => {
   const sql = 'SELECT * FROM usuarios WHERE token_verificacion = ?';
   db.query(sql, [token], callback);
 };
 
-// Marcar usuario como verificado
+// Marca al usuario como verificado (y borra el token)
 const marcarComoVerificado = (id, callback) => {
   const sql = 'UPDATE usuarios SET verificado = 1, token_verificacion = NULL WHERE id = ?';
   db.query(sql, [id], callback);
 };
 
-// Obtener todos los usuarios
+// Trae todos los usuarios (se usa en el panel de admin)
 const obtenerTodos = (callback) => {
   const sql = 'SELECT id, nombre, email, rol, verificado, activo FROM usuarios ORDER BY id DESC';
   db.query(sql, callback);
 };
 
-// Actualizar el rol del usuario
+// Cambia el rol del usuario (por ejemplo de 'usuario' a 'admin')
 const actualizarRol = (id, nuevoRol, callback) => {
   const sql = 'UPDATE usuarios SET rol = ? WHERE id = ?';
   db.query(sql, [nuevoRol, id], callback);
 };
 
-// Activar / desactivar usuario
+// Cambia el estado del usuario (activar o desactivar cuenta)
 const actualizarEstado = (id, nuevoEstado, callback) => {
   const sql = 'UPDATE usuarios SET activo = ? WHERE id = ?';
   db.query(sql, [nuevoEstado, id], callback);
