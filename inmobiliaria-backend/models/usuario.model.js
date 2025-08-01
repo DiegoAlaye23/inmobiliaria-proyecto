@@ -54,6 +54,30 @@ const actualizarEstado = (id, nuevoEstado, callback) => {
   db.query(sql, [nuevoEstado, id], callback);
 };
 
+// Guarda el token de recuperación y la fecha de expiración
+const guardarTokenRecuperacion = (email, token, expiracion, callback) => {
+  const sql = 'UPDATE usuarios SET token_recuperacion = ?, expiracion_token = ? WHERE email = ?';
+  db.query(sql, [token, expiracion, email], callback);
+};
+
+// Busca un usuario por su token de recuperación
+const buscarPorTokenRecuperacion = (token, callback) => {
+  const sql = 'SELECT * FROM usuarios WHERE token_recuperacion = ?';
+  db.query(sql, [token], callback);
+};
+
+// Actualiza la contraseña y elimina el token de recuperación
+const actualizarPasswordYLimpiarToken = (id, nuevaPassword, callback) => {
+  const sql = `
+    UPDATE usuarios 
+    SET password = ?, token_recuperacion = NULL, expiracion_token = NULL 
+    WHERE id = ?
+  `;
+  db.query(sql, [nuevaPassword, id], callback);
+};
+
+
+
 module.exports = {
   crearUsuario,
   buscarPorEmail,
@@ -61,6 +85,9 @@ module.exports = {
   marcarComoVerificado,
   obtenerTodos,
   actualizarRol,
-  actualizarEstado
+  actualizarEstado,
+  guardarTokenRecuperacion,
+  buscarPorTokenRecuperacion,
+  actualizarPasswordYLimpiarToken
 };
 

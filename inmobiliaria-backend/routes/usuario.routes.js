@@ -9,25 +9,39 @@ const verificarAdmin = require('../middlewares/verificarAdmin');
 // Importamos el middleware que valida si el token JWT es válido (usuario autenticado)
 const verifyToken = require('../middlewares/auth.middleware');
 
-// Públicos
-// Ruta para registrar un nuevo usuario (nombre, email, contraseña)
+// ==== RUTAS PÚBLICAS ====
+
+// Registro de usuario
 router.post('/registro', controlador.registrarUsuario);
-// Ruta para verificar la cuenta mediante un token enviado por email
+
+// Verificación de cuenta por correo
 router.get('/verificar/:token', controlador.verificarCuenta);
-// Ruta para iniciar sesión. Si los datos son correctos, devuelve un token JWT
+
+// Login de usuario
 router.post('/login', controlador.loginUsuario);
 
-// Privados para admins
-// Ruta para crear un nuevo administrador (solo accesible por otros admins logueados)
+// 🔐 Recuperar contraseña - Enviar email con link
+router.post('/recuperar', controlador.solicitarRecuperacion);
+
+// 🔐 Restablecer contraseña usando el token del email
+router.post('/restablecer/:token', controlador.restablecerPassword);
+
+// ==== RUTAS PRIVADAS (requieren token + rol admin) ====
+
+// Crear un administrador (solo admins)
 router.post('/crear-admin', verifyToken, verificarAdmin, controlador.crearAdmin);
-// Ruta para obtener el listado de todos los usuarios registrados
+
+// Obtener todos los usuarios
 router.get('/', verifyToken, verificarAdmin, controlador.obtenerUsuarios);
-// Ruta para cambiar el estado (activo/inactivo) de un usuario
+
+// Cambiar estado (activo/inactivo)
 router.patch('/estado/:id', verifyToken, verificarAdmin, controlador.cambiarEstadoUsuario);
-// Ruta para cambiar el rol de un usuario (por ejemplo: cliente → admin)
+
+// Cambiar rol (usuario/admin)
 router.patch('/rol/:id', verifyToken, verificarAdmin, controlador.cambiarRolUsuario);
 
 // Exportamos el router para poder usarlo en el archivo principal (index.js)
 module.exports = router;
+
 
 

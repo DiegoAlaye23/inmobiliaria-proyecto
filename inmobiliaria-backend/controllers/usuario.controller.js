@@ -147,6 +147,67 @@ const cambiarRolUsuario = (req, res) => {
   });
 };
 
+// POST /api/usuarios/recuperar
+const solicitarRecuperacion = (req, res) => {
+  const { email } = req.body;
+
+  Usuario.buscarPorEmail(email, async (err, resultados) => {
+    if (err) return res.status(500).json({ error: 'Error en la base de datos' });
+    if (resultados.length === 0) return res.status(404).json({ error: 'Email no registrado' });
+
+    const token = uuidv4();
+    const expiracion = new Date(Date.now() + 1000 * 60 * 15); // 15 minutos
+
+    Usuario.guardarTokenRecuperacion(email, token, expiracion, async (err2) => {
+      if (err2) return res.status(500).json({ error: 'Error al guardar token' });
+
+      const url = `http://localhost:5173/restablecer/${token}`;
+
+      // Enviar mail
+      await transporter.sendMail({
+        from: `"Inmobiliaria" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'Recuperación de contraseña',
+        html: `<p>Recibimos una solicitud para restablecer tu contraseña.</p>
+               <p>Haz clic en el siguiente enlace para continuar:</p>
+               <a href="${url}">${url}</a>
+               <p>Este enlace expirará en 15 minutos.</p>`
+      });
+
+      res.json({ mensaje: 'Correo de recuperación enviado' });
+    });
+  });
+};
+
+// POST /api/usuarios/restablecer/:token
+const restablecerPassword = async (req, res) => {
+  const { token } = req.params;
+  const { nuevaPassword } = req.body;
+
+  Usuario.buscarPorTokenRecuperacion(token, async (err, resultados) => {
+    if (err) return res.status(500).json({ error: 'Error en la base de datos' });
+    if (resultados.length === 0) return res.status(400).json({ error: 'Token inválido' });
+
+    const usuario = resultados[0];
+
+    // Verificar si el token está vencido
+    const ahora = new Date();
+    const expiracion = new Date(usuario.expiracion_token);
+
+    if (ahora > expiracion) {
+      return res.status(400).json({ error: 'El token ha expirado' });
+    }
+
+    const passwordHasheada = await bcrypt.hash(nuevaPassword, 10);
+
+    Usuario.actualizarPasswordYLimpiarToken(usuario.id, passwordHasheada, (err2) => {
+      if (err2) return res.status(500).json({ error: 'Error al actualizar la contraseña' });
+      res.json({ mensaje: 'Contraseña actualizada correctamente' });
+    });
+  });
+};
+
+
 module.exports = {
   registrarUsuario,
   verificarCuenta,
@@ -154,6 +215,8 @@ module.exports = {
   crearAdmin,
   obtenerUsuarios,
   cambiarEstadoUsuario,
-  cambiarRolUsuario
+  cambiarRolUsuario,
+  solicitarRecuperacion,
+  restablecerPassword
 };
 

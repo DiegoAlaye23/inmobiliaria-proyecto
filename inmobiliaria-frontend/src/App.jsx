@@ -13,6 +13,8 @@ import RutaPrivadaAdmin from './components/RutaPrivadaAdmin'; // Protege rutas d
 import VerificarCuenta from './pages/VerificarCuenta';
 import UsuariosAdmin from './pages/UsuariosAdmin'; 
 import MensajesAdmin from './pages/MensajesAdmin';
+import RecuperarPassword from './pages/RecuperarPassword';
+import RestablecerPassword from './pages/RestablecerPassword';
 
 // Función principal del componente App
 function App({ setModo, modo }) {
@@ -28,6 +30,8 @@ function App({ setModo, modo }) {
         {/* Autenticación */}
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Register />} />
+        <Route path="/recuperar" element={<RecuperarPassword />} />
+        <Route path="/restablecer/:token" element={<RestablecerPassword />} />
         {/* Verificación de cuenta por token */}
         <Route path="/verificar/:token" element={<VerificarCuenta />} />
         {/* Detalle de una propiedad específica */}
