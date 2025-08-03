@@ -24,7 +24,7 @@ function RecuperarPassword() {
     setCargando(true);
 
     try {
-      const res = await axios.post('http://localhost:3001/api/usuarios/recuperar', { email });
+      const res = await axios.post('https://inmobiliaria-proyecto.onrender.com/api/usuarios/recuperar', { email });
       setMensaje(res.data.mensaje);
     } catch (err) {
       setError(

@@ -23,13 +23,13 @@ function UsuariosAdmin() {
   const headers = { Authorization: `Bearer ${token}` };
 
   const cargarUsuarios = () => {
-    axios.get('http://localhost:3001/api/usuarios', { headers })
+    axios.get('https://inmobiliaria-proyecto.onrender.com/api/usuarios', { headers })
       .then((res) => setUsuarios(res.data))
       .catch(() => setSnackbar({ open: true, mensaje: 'Error al cargar usuarios', tipo: 'error' }));
   };
 
   const cambiarRol = (id, nuevoRol) => {
-    axios.patch(`http://localhost:3001/api/usuarios/rol/${id}`, { rol: nuevoRol }, { headers })
+    axios.patch(`https://inmobiliaria-proyecto.onrender.com/api/usuarios/rol/${id}`, { rol: nuevoRol }, { headers })
       .then(() => {
         setSnackbar({ open: true, mensaje: 'Rol actualizado', tipo: 'success' });
         cargarUsuarios();
@@ -38,7 +38,7 @@ function UsuariosAdmin() {
   };
 
   const cambiarEstado = (id, nuevoEstado) => {
-    axios.patch(`http://localhost:3001/api/usuarios/estado/${id}`, { activo: nuevoEstado }, { headers })
+    axios.patch(`https://inmobiliaria-proyecto.onrender.com/api/usuarios/estado/${id}`, { activo: nuevoEstado }, { headers })
       .then(() => {
         setSnackbar({ open: true, mensaje: 'Estado actualizado', tipo: 'success' });
         cargarUsuarios();

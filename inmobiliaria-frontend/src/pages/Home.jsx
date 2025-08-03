@@ -17,7 +17,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/propiedades")
+      .get("https://inmobiliaria-proyecto.onrender.com/api/propiedades")
       .then((res) => setPropiedades(res.data))
       .catch((err) => console.error("Error al cargar propiedades:", err));
   }, []);
@@ -46,7 +46,7 @@ function Home() {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={`http://localhost:3001/uploads/${prop.imagen_destacada}`}
+                  image={`https://inmobiliaria-proyecto.onrender.com/uploads/${prop.imagen_destacada}`}
                   alt={prop.titulo}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>

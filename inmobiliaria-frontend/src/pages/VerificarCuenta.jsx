@@ -10,7 +10,7 @@ const VerificarCuenta = () => {
     const verificarCuenta = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/usuarios/verificar/${token}`
+          `https://inmobiliaria-proyecto.onrender.com/api/usuarios/verificar/${token}`
         );
         if (response.status === 200) {
           setEstado("verificada");

@@ -21,7 +21,7 @@ function DetallePropiedad() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/propiedades/${id}`)
+      .get(`https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`)
       .then((res) => setPropiedad(res.data))
       .catch((err) => {
         console.error(err);
@@ -44,7 +44,7 @@ function DetallePropiedad() {
         <CardMedia
           component="img"
           height="400"
-          image={`http://localhost:3001/uploads/${propiedad.imagen_destacada}`}
+          image={`https://inmobiliaria-proyecto.onrender.com/uploads/${propiedad.imagen_destacada}`}
           alt={propiedad.titulo}
         />
 

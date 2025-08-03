@@ -22,7 +22,7 @@ function Login() {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:3001/api/usuarios/login", {
+      const res = await axios.post("https://inmobiliaria-proyecto.onrender.com/api/usuarios/login", {
         email,
         password,
       });

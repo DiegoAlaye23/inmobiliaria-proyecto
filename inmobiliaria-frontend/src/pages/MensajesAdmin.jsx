@@ -20,7 +20,7 @@ function MensajesAdmin() {
 
   const cargarMensajes = () => {
     axios
-      .get("http://localhost:3001/api/mensajes", {
+      .get("https://inmobiliaria-proyecto.onrender.com/api/mensajes", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setMensajes(res.data))
@@ -32,7 +32,7 @@ function MensajesAdmin() {
 
   const handleEliminarMensaje = (id) => {
     axios
-      .delete(`http://localhost:3001/api/mensajes/${id}`, {
+      .delete(`https://inmobiliaria-proyecto.onrender.com/api/mensajes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => cargarMensajes())

@@ -36,7 +36,7 @@ function Register() {
     }
 
     try {
-      const res = await axios.post("http://localhost:3001/api/usuarios/registro", {
+      const res = await axios.post("https://inmobiliaria-proyecto.onrender.com/api/usuarios/registro", {
         nombre: form.nombre,
         email: form.email,
         password: form.password,

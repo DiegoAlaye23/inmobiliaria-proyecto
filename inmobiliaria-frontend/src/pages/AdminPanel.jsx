@@ -40,14 +40,14 @@ function AdminPanel() {
 
   const cargarPropiedades = () => {
     axios
-      .get("http://localhost:3001/api/propiedades")
+      .get("https://inmobiliaria-proyecto.onrender.com/api/propiedades")
       .then((res) => setPropiedades(res.data))
       .catch((err) => console.error(err));
   };
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:3001/api/propiedades/${id}`, {
+      .delete(`https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(cargarPropiedades)
@@ -62,7 +62,7 @@ function AdminPanel() {
     });
 
     axios
-      .post("http://localhost:3001/api/propiedades", formData, {
+      .post("https://inmobiliaria-proyecto.onrender.com/api/propiedades", formData, {
         headers: {
           Authorization: `Bearer ${token}`, 
         },
@@ -92,7 +92,7 @@ function AdminPanel() {
 
   const handleSaveEdit = (id) => {
     axios
-      .put(`http://localhost:3001/api/propiedades/${id}`, editData, {
+      .put(`https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`, editData, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {
@@ -112,7 +112,7 @@ function AdminPanel() {
     setAdminMensaje("");
 
     axios
-      .post("http://localhost:3001/api/usuarios/crear-admin", nuevoAdmin, {
+      .post("https://inmobiliaria-proyecto.onrender.com/api/usuarios/crear-admin", nuevoAdmin, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {
@@ -279,7 +279,7 @@ function AdminPanel() {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={`http://localhost:3001/uploads/${prop.imagen_destacada}`}
+                  image={`https://inmobiliaria-proyecto.onrender.com/uploads/${prop.imagen_destacada}`}
                   alt={prop.titulo}
                 />
                 <CardContent>

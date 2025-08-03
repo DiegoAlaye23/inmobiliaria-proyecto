@@ -36,7 +36,7 @@ function Contacto() {
     setError('');
     setEnviado(false);
 
-    axios.post('http://localhost:3001/api/mensajes', {
+    axios.post('https://inmobiliaria-proyecto.onrender.com/api/mensajes', {
       nombre: form.nombre,
       email: form.email,
       mensaje: form.mensaje,
