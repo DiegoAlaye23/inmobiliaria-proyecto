@@ -26,7 +26,7 @@ const registrarUsuario = async (req, res) => {
     }, async (err, result) => {
       if (err) return res.status(500).json({ error: 'Error al registrar usuario' });
 
-      const urlVerificacion = `http://localhost:3001/api/usuarios/verificar/${tokenVerificacion}`;
+      const urlVerificacion = `https://inmobiliaria-proyecto.onrender.com/api/usuarios/verificar/${tokenVerificacion}`;
 
       // Enviamos correo de verificación
       await transporter.sendMail({
