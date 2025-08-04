@@ -24,20 +24,18 @@ const registrarUsuario = async (req, res) => {
       verificado: false,
       token_verificacion: tokenVerificacion
     }, async (err, result) => {
-      console.error('❌ Error en crearUsuario:', err);
       if (err) return res.status(500).json({ error: 'Error al registrar usuario' });
 
       const urlVerificacion = `http://localhost:3001/api/usuarios/verificar/${tokenVerificacion}`;
 
       // Enviamos correo de verificación
-      /*
       await transporter.sendMail({
         from: `"Inmobiliaria" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: 'Verificá tu cuenta',
         html: `<p>Hola ${nombre},</p><p>Verificá tu cuenta haciendo clic en el siguiente enlace:</p><a href="${urlVerificacion}">${urlVerificacion}</a>`
       });
-      */
+
       res.status(201).json({ mensaje: 'Usuario registrado. Revisa tu correo.' });
     });
   } catch (err) {
