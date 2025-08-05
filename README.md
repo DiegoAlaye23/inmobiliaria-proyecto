@@ -62,7 +62,7 @@ EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=tu_correo@gmail.com
 EMAIL_PASS=contraseña_app_gmail
-⚠️ Asegurate de tener habilitada la opción de "Contraseñas de aplicaciones" en Gmail.
+⚠️ Asegúrate de tener habilitada la opción de "Contraseñas de aplicaciones" en Gmail.
 4. Ejecutar el proyecto
 Backend
 cd backend
