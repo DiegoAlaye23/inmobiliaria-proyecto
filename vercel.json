@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "inmobiliaria-backend/index.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "inmobiliaria-backend/index.js" }
+  ]
+}
