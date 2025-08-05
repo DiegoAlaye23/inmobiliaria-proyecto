@@ -45,6 +45,8 @@ Este proyecto es una aplicación web completa para la gestión de propiedades in
 ```bash
 git clone https://github.com/tu-usuario/inmobiliaria-web.git
 cd inmobiliaria-web
+```
+
 2. Instalar dependencias
 Backend
 cd backend
