@@ -18,7 +18,10 @@ function Home() {
   useEffect(() => {
     axios
       .get("https://inmobiliaria-proyecto.onrender.com/api/propiedades")
-      .then((res) => setPropiedades(res.data))
+      .then((res) => {
+        console.log("Respuesta del backend:", res.data);
+        setPropiedades(res.data);
+      })
       .catch((err) => console.error("Error al cargar propiedades:", err));
   }, []);
 
@@ -28,9 +31,7 @@ function Home() {
         Propiedades Disponibles
       </Typography>
 
-      {propiedades.length === 0 ? (
-        <Typography textAlign="center">No hay propiedades disponibles.</Typography>
-      ) : (
+      {Array.isArray(propiedades) && propiedades.length > 0 ? (
         <Grid container spacing={4} justifyContent="center">
           {propiedades.map((prop) => (
             <Grid item key={prop.id} xs={12} sm={6} md={4}>
@@ -77,11 +78,13 @@ function Home() {
             </Grid>
           ))}
         </Grid>
+      ) : (
+        <Typography textAlign="center">
+          No hay propiedades disponibles.
+        </Typography>
       )}
     </Box>
   );
 }
 
 export default Home;
-
-
