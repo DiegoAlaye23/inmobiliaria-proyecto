@@ -74,3 +74,14 @@ cd ../frontend
 npm run dev
 👨‍💻 Autor
 Diego Alaye
+
+---
+
+### Despliegue del frontend en Netlify
+
+El archivo `netlify.toml` configura la carpeta `inmobiliaria-frontend` para que Netlify ejecute `npm run build` y publique el contenido de `dist`.
+
+Para que todas las rutas de la SPA funcionen correctamente se agregó:
+
+- `base: "/"` en `vite.config.js`, lo que garantiza que los scripts se carguen desde la raíz sin importar la ruta solicitada.
+- Una regla de redirección en `netlify.toml` que envía cualquier ruta a `index.html`, evitando pantallas en blanco en páginas como `/admin` o `/admin/mensajes`.
