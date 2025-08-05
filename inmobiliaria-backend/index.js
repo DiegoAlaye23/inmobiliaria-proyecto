@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 3001;
 const propiedadRoutes = require('./routes/propiedad.routes');
 const usuarioRoutes = require('./routes/usuario.routes');
 const mensajeRoutes = require('./routes/mensaje.routes');
+const healthRoutes = require('./routes/health.routes');
 
 
 // Middlewares
@@ -23,6 +24,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Carpeta
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/propiedades', propiedadRoutes);
 app.use('/api/mensajes', mensajeRoutes);
+app.use('/api/health', healthRoutes);
 
 // Iniciamos el servidor
 app.listen(PORT, () => {
