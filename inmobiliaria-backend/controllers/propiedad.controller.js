@@ -74,7 +74,7 @@ const actualizarPropiedad = (req, res) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "Error al actualizar la propiedad" });
-    } else if (resultado.affectedRows === 0) {
+    } else if (resultado.rowCount === 0) {
       res.status(404).json({ mensaje: "Propiedad no encontrada" });
     } else {
       res.json({ mensaje: "Propiedad actualizada correctamente" });
@@ -91,7 +91,7 @@ const eliminarPropiedad = (req, res) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "Error al eliminar la propiedad" });
-    } else if (resultado.affectedRows === 0) {
+    } else if (resultado.rowCount === 0) {
       res.status(404).json({ mensaje: "Propiedad no encontrada" });
     } else {
       res.json({ mensaje: "Propiedad eliminada correctamente" });
