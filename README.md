@@ -33,7 +33,7 @@ Este proyecto es una aplicación web completa para la gestión de propiedades in
 |-------------|------------------------------------------|
 | Frontend    | React.js + MUI (Material UI)             |
 | Backend     | Node.js + Express                        |
-| Base de datos | MySQL                                 |
+| Base de datos | Postgre SQL                            |
 | Autenticación | JWT + BCrypt                           |
 | Email       | Nodemailer + Gmail / Mailtrap            |
 
@@ -62,7 +62,7 @@ EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=tu_correo@gmail.com
 EMAIL_PASS=contraseña_app_gmail
-⚠️ Asegurate de tener habilitada la opción de "Contraseñas de aplicaciones" en Gmail.
+⚠️ Asegúrate de tener habilitada la opción de "Contraseñas de aplicaciones" en Gmail.
 4. Ejecutar el proyecto
 Backend
 cd backend
