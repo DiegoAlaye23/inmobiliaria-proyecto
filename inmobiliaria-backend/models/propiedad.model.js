@@ -3,7 +3,6 @@ const db = require('../config/db');
 
 /**
  * Obtener todas las propiedades registradas
- * @param {function} callback - función que maneja el resultado
  */
 const getTodasLasPropiedades = (callback) => {
   db.query('SELECT * FROM propiedades', callback);
@@ -11,25 +10,24 @@ const getTodasLasPropiedades = (callback) => {
 
 /**
  * Obtener una propiedad específica por ID
- * @param {number} id - ID de la propiedad a buscar
- * @param {function} callback - función que maneja el resultado
  */
 const getPropiedadPorId = (id, callback) => {
-  const sql = 'SELECT * FROM propiedades WHERE id = ?';
+  const sql = 'SELECT * FROM propiedades WHERE id = $1';
   db.query(sql, [id], callback);
 };
 
 /**
  * Crear una nueva propiedad
- * @param {object} data - Datos de la nueva propiedad
- * @param {function} callback - función que maneja el resultado
  */
 const crearPropiedad = (data, callback) => {
   const sql = `
     INSERT INTO propiedades (
       titulo, descripcion, precio, tipo, direccion, ciudad, provincia,
       ambientes, banos, cochera, m2, imagen_destacada, fecha_publicacion
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (
+      $1, $2, $3, $4, $5, $6, $7,
+      $8, $9, $10, $11, $12, $13
+    )
   `;
 
   const valores = [
@@ -45,7 +43,7 @@ const crearPropiedad = (data, callback) => {
     data.cochera,
     data.m2,
     data.imagen_destacada || '',
-    data.fecha_publicacion || new Date()
+    data.fecha_publicacion || new Date().toISOString().slice(0, 10)
   ];
 
   db.query(sql, valores, callback);
@@ -53,16 +51,13 @@ const crearPropiedad = (data, callback) => {
 
 /**
  * Actualizar una propiedad existente
- * @param {number} id - ID de la propiedad a actualizar
- * @param {object} data - Nuevos datos de la propiedad
- * @param {function} callback - función que maneja el resultado
  */
 const actualizarPropiedad = (id, data, callback) => {
   const sql = `
     UPDATE propiedades SET
-      titulo = ?, descripcion = ?, precio = ?, tipo = ?, direccion = ?, ciudad = ?, provincia = ?,
-      ambientes = ?, banos = ?, cochera = ?, m2 = ?, imagen_destacada = ?, fecha_publicacion = ?
-    WHERE id = ?
+      titulo = $1, descripcion = $2, precio = $3, tipo = $4, direccion = $5, ciudad = $6, provincia = $7,
+      ambientes = $8, banos = $9, cochera = $10, m2 = $11, imagen_destacada = $12, fecha_publicacion = $13
+    WHERE id = $14
   `;
 
   const valores = [
@@ -78,7 +73,7 @@ const actualizarPropiedad = (id, data, callback) => {
     data.cochera,
     data.m2,
     data.imagen_destacada || '',
-    (new Date(data.fecha_publicacion)).toISOString().slice(0, 10), //toISOString().slice(0, 10) convierte la fecha a formato YYYY-MM-DD
+    (new Date(data.fecha_publicacion)).toISOString().slice(0, 10),
     id
   ];
 
@@ -87,11 +82,9 @@ const actualizarPropiedad = (id, data, callback) => {
 
 /**
  * Eliminar una propiedad
- * @param {number} id - ID de la propiedad a eliminar
- * @param {function} callback - función que maneja el resultado
  */
 const eliminarPropiedad = (id, callback) => {
-  const sql = 'DELETE FROM propiedades WHERE id = ?';
+  const sql = 'DELETE FROM propiedades WHERE id = $1';
   db.query(sql, [id], callback);
 };
 
@@ -103,6 +96,7 @@ module.exports = {
   actualizarPropiedad,
   eliminarPropiedad,
 };
+
 
 
 
