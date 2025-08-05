@@ -33,7 +33,7 @@ Este proyecto es una aplicación web completa para la gestión de propiedades in
 |-------------|------------------------------------------|
 | Frontend    | React.js + MUI (Material UI)             |
 | Backend     | Node.js + Express                        |
-| Base de datos | MySQL                                 |
+| Base de datos | Postgre SQL                            |
 | Autenticación | JWT + BCrypt                           |
 | Email       | Nodemailer + Gmail / Mailtrap            |
 
