@@ -33,7 +33,7 @@ Este proyecto es una aplicación web completa para la gestión de propiedades in
 |-------------|------------------------------------------|
 | Frontend    | React.js + MUI (Material UI)             |
 | Backend     | Node.js + Express                        |
-| Base de datos | MySQL                                 |
+| Base de datos | PostgreSQL                            |
 | Autenticación | JWT + BCrypt                           |
 | Email       | Nodemailer + Gmail / Mailtrap            |
 
@@ -54,10 +54,7 @@ cd ../frontend
 npm install
 3. Variables de entorno
 .env del backend (crear archivo en backend/.env)
-DB_HOST=localhost
-DB_USER=tu_usuario_mysql
-DB_PASSWORD=tu_contraseña_mysql
-DB_NAME=inmobiliaria
+DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/inmobiliaria
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=tu_correo@gmail.com
