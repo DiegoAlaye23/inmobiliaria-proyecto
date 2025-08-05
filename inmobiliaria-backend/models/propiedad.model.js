@@ -73,7 +73,13 @@ const actualizarPropiedad = (id, data, callback) => {
     data.cochera,
     data.m2,
     data.imagen_destacada || '',
-    (new Date(data.fecha_publicacion)).toISOString().slice(0, 10),
+    (() => {
+      // Si no se envía una fecha válida, usamos la fecha actual.
+      const fecha = new Date(data.fecha_publicacion);
+      return isNaN(fecha.getTime())
+        ? new Date().toISOString().slice(0, 10)
+        : fecha.toISOString().slice(0, 10);
+    })(),
     id
   ];
 
