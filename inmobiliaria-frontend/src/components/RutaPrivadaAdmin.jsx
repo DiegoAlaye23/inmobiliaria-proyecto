@@ -19,7 +19,7 @@ function RutaPrivadaAdmin({ children }) {
     try {
       const userData = JSON.parse(usuario);
       setAutorizado(userData.rol === 'admin');
-    } catch (err) {
+    } catch {
       setAutorizado(false);
     } finally {
       setValidando(false);
