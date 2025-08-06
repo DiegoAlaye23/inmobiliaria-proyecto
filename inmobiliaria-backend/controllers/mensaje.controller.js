@@ -23,8 +23,8 @@ const obtenerMensajes = (req, res) => {
       // Error al consultar la base de datos
       res.status(500).json({ error: 'Error al obtener mensajes' });
     } else {
-      // Devuelve los mensajes como respuesta en formato JSON
-      res.json(resultados);
+      // Devuelve solo las filas de los mensajes en formato JSON
+      res.json(resultados.rows);
     }
   });
 };
