@@ -59,7 +59,7 @@ EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=tu_correo@gmail.com
 EMAIL_PASS=contraseña_app_gmail
-FRONTEND_URL=https://tu-sitio.netlify.app
+FRONTEND_URL=https://inmobiliariafrontend.netlify.app
 ⚠️ Asegúrate de tener habilitada la opción de "Contraseñas de aplicaciones" en Gmail.
 4. Ejecutar el proyecto
 Backend
@@ -88,5 +88,4 @@ Para que todas las rutas de la SPA funcionen correctamente:
 
 - `base: "/"` en `vite.config.js` asegura que los scripts se carguen desde la raíz.
 - `netlify.toml` incluye una regla de redirección que envía cualquier ruta a `index.html`, evitando pantallas en blanco en páginas como `/admin` o `/admin/mensajes`.
-
 
