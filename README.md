@@ -73,6 +73,9 @@ npm run dev
 Diego Alaye
 
 ---
+ uh0fsb-codex/change-frontend-service-to-netlify
+
+ main
 ### Despliegue del frontend en Netlify
 
 Netlify construye el frontend desde `inmobiliaria-frontend`:
