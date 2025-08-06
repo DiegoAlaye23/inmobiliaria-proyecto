@@ -27,6 +27,7 @@ function RestablecerPassword() {
 
     try {
       const res = await api.post(`/usuarios/restablecer/${token}`, {
+
         nuevaPassword,
       });
 

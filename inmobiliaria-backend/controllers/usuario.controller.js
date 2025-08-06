@@ -190,6 +190,7 @@ const solicitarRecuperacion = (req, res) => {
 
       const frontendUrl =
         process.env.FRONTEND_URL || "https://inmobiliariafrontend.netlify.app";
+
       const url = `${frontendUrl}/restablecer/${token}`;
 
       // Enviar mail
