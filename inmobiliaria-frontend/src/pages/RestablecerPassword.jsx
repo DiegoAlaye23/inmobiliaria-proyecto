@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../config/axios.js';
 
 function RestablecerPassword() {
   const { token } = useParams();
@@ -26,7 +26,8 @@ function RestablecerPassword() {
     setCargando(true);
 
     try {
-      const res = await axios.post(`inmobiliariafrontend.netlify.app/api/usuarios/restablecer/${token}`, {
+      const res = await api.post(`/usuarios/restablecer/${token}`, {
+
         nuevaPassword,
       });
 
