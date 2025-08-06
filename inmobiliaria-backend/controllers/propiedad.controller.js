@@ -8,7 +8,9 @@ const obtenerPropiedades = (req, res) => {
     if (err) {
       res.status(500).json({ error: "Error al obtener propiedades" });
     } else {
-      res.json(resultados);
+      // El paquete `pg` devuelve un objeto con metadatos.
+      // Enviamos solo las filas para que el frontend reciba un arreglo.
+      res.json(resultados.rows);
     }
   });
 };
@@ -24,10 +26,11 @@ const obtenerPropiedadPorId = (req, res) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "Error al obtener la propiedad" });
-    } else if (resultados.length === 0) {
+    } else if (resultados.rows.length === 0) {
       res.status(404).json({ mensaje: "Propiedad no encontrada" });
     } else {
-      res.json(resultados[0]);
+      // `rows` contiene las propiedades obtenidas; devolvemos la primera.
+      res.json(resultados.rows[0]);
     }
   });
 };

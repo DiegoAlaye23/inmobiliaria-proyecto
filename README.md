@@ -33,7 +33,7 @@ Este proyecto es una aplicación web completa para la gestión de propiedades in
 |-------------|------------------------------------------|
 | Frontend    | React.js + MUI (Material UI)             |
 | Backend     | Node.js + Express                        |
-| Base de datos | Postgre SQL                            |
+| Base de datos | PostgreSQL                            |
 | Autenticación | JWT + BCrypt                           |
 | Email       | Nodemailer + Gmail / Mailtrap            |
 
@@ -56,10 +56,7 @@ cd ../frontend
 npm install
 3. Variables de entorno
 .env del backend (crear archivo en backend/.env)
-DB_HOST=localhost
-DB_USER=tu_usuario_mysql
-DB_PASSWORD=tu_contraseña_mysql
-DB_NAME=inmobiliaria
+DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/inmobiliaria
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=tu_correo@gmail.com
@@ -74,3 +71,22 @@ cd ../frontend
 npm run dev
 👨‍💻 Autor
 Diego Alaye
+
+---
+
+### Despliegue del frontend en Netlify
+
+Netlify construye el frontend desde `inmobiliaria-frontend`:
+
+```toml
+[build]
+base = "inmobiliaria-frontend"
+command = "npm run build"
+publish = "dist"
+```
+
+Para que todas las rutas de la SPA funcionen correctamente:
+
+- `base: "/"` en `vite.config.js` asegura que los scripts se carguen desde la raíz.
+- `netlify.toml` incluye una regla de redirección que envía cualquier ruta a `index.html`, evitando pantallas en blanco en páginas como `/admin` o `/admin/mensajes`.
+
