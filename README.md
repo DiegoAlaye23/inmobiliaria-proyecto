@@ -45,6 +45,8 @@ Este proyecto es una aplicación web completa para la gestión de propiedades in
 ```bash
 git clone https://github.com/tu-usuario/inmobiliaria-web.git
 cd inmobiliaria-web
+```
+
 2. Instalar dependencias
 Backend
 cd backend
@@ -59,7 +61,7 @@ EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=tu_correo@gmail.com
 EMAIL_PASS=contraseña_app_gmail
-⚠️ Asegurate de tener habilitada la opción de "Contraseñas de aplicaciones" en Gmail.
+⚠️ Asegúrate de tener habilitada la opción de "Contraseñas de aplicaciones" en Gmail.
 4. Ejecutar el proyecto
 Backend
 cd backend
@@ -69,3 +71,21 @@ cd ../frontend
 npm run dev
 👨‍💻 Autor
 Diego Alaye
+
+---
+### Despliegue del frontend en Netlify
+
+Netlify construye el frontend desde `inmobiliaria-frontend`:
+
+```toml
+[build]
+base = "inmobiliaria-frontend"
+command = "npm run build"
+publish = "dist"
+```
+
+Para que todas las rutas de la SPA funcionen correctamente:
+
+- `base: "/"` en `vite.config.js` asegura que los scripts se carguen desde la raíz.
+- `netlify.toml` incluye una regla de redirección que envía cualquier ruta a `index.html`, evitando pantallas en blanco en páginas como `/admin` o `/admin/mensajes`.
+

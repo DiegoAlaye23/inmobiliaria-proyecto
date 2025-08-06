@@ -20,13 +20,19 @@ const crearUsuario = (usuario, callback) => {
 // Busca un usuario por email
 const buscarPorEmail = (email, callback) => {
   const sql = 'SELECT * FROM usuarios WHERE email = $1';
-  pool.query(sql, [email], callback);
+  pool.query(sql, [email], (err, result) => {
+    if (err) return callback(err);
+    callback(null, result.rows);
+  });
 };
 
 // Busca por token de verificación
 const buscarPorTokenVerificacion = (token, callback) => {
   const sql = 'SELECT * FROM usuarios WHERE token_verificacion = $1';
-  pool.query(sql, [token], callback);
+  pool.query(sql, [token], (err, result) => {
+    if (err) return callback(err);
+    callback(null, result.rows);
+  });
 };
 
 // Marca usuario como verificado
@@ -38,7 +44,10 @@ const marcarComoVerificado = (id, callback) => {
 // Obtener todos los usuarios
 const obtenerTodos = (callback) => {
   const sql = 'SELECT id, nombre, email, rol, verificado, activo FROM usuarios ORDER BY id DESC';
-  pool.query(sql, callback);
+  pool.query(sql, (err, result) => {
+    if (err) return callback(err);
+    callback(null, result.rows);
+  });
 };
 
 // Cambia el rol del usuario
@@ -62,7 +71,10 @@ const guardarTokenRecuperacion = (email, token, expiracion, callback) => {
 // Busca por token de recuperación
 const buscarPorTokenRecuperacion = (token, callback) => {
   const sql = 'SELECT * FROM usuarios WHERE token_recuperacion = $1';
-  pool.query(sql, [token], callback);
+  pool.query(sql, [token], (err, result) => {
+    if (err) return callback(err);
+    callback(null, result.rows);
+  });
 };
 
 // Actualiza password y limpia tokens
