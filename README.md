@@ -76,7 +76,13 @@ npm run dev
 Diego Alaye
 
 ---
-
 ### Despliegue del frontend en Netlify
 
-El archivo `netlify.toml` configura la carpeta `inmobiliaria-frontend` para que Netlify ejecute `npm run build` y publique el contenido de `dist`. De esta manera, los archivos JavaScript se sirven con el tipo MIME correcto y se evita la pantalla en blanco al cargar el sitio.
+Netlify construye el frontend desde `inmobiliaria-frontend`:
+
+```toml
+[build]
+base = "inmobiliaria-frontend"
+command = "npm run build"
+publish = "dist"
+
