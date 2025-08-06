@@ -1,6 +1,7 @@
 [build]
-command = "npm run build --prefix inmobiliaria-frontend"
-publish = "inmobiliaria-frontend/dist"
+base = "inmobiliaria-frontend"
+command = "npm run build"
+publish = "dist"
 
 [[redirects]]
 from = "/*"

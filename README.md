@@ -80,8 +80,9 @@ Netlify construye el frontend desde `inmobiliaria-frontend`:
 
 ```toml
 [build]
-command = "npm run build --prefix inmobiliaria-frontend"
-publish = "inmobiliaria-frontend/dist"
+base = "inmobiliaria-frontend"
+command = "npm run build"
+publish = "dist"
 ```
 
 Para que todas las rutas de la SPA funcionen correctamente:
