@@ -1,5 +1,3 @@
-# 🏠 Inmobiliaria Web - Proyecto Final Web III
-
 Este proyecto es una aplicación web completa para la gestión de propiedades inmobiliarias. Permite a los usuarios ver propiedades, enviar consultas y registrarse, mientras que los administradores pueden gestionar propiedades, usuarios y mensajes.
 
 ## 📌 Funcionalidades principales
