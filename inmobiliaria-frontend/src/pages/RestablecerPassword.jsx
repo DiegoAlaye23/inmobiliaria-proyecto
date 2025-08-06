@@ -26,7 +26,7 @@ function RestablecerPassword() {
     setCargando(true);
 
     try {
-      const res = await axios.post(`https://inmobiliaria-proyecto.onrender.com/api/usuarios/restablecer/${token}`, {
+      const res = await axios.post(`inmobiliariafrontend.netlify.app/api/usuarios/restablecer/${token}`, {
         nuevaPassword,
       });
 
