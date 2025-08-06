@@ -188,7 +188,8 @@ const solicitarRecuperacion = (req, res) => {
       if (err2)
         return res.status(500).json({ error: "Error al guardar token" });
 
-      const url = `https://inmobiliaria-proyecto.vercel.app/restablecer/${token}`;
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      const url = `${frontendUrl}/restablecer/${token}`;
 
       // Enviar mail
       await transporter.sendMail({
