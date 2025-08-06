@@ -73,7 +73,6 @@ npm run dev
 Diego Alaye
 
 ---
-
 ### Despliegue del frontend en Netlify
 
 Netlify construye el frontend desde `inmobiliaria-frontend`:
