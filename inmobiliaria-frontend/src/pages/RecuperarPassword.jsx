@@ -9,7 +9,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../config/axios.js';
 
 function RecuperarPassword() {
   const [email, setEmail] = useState('');
@@ -24,7 +24,7 @@ function RecuperarPassword() {
     setCargando(true);
 
     try {
-      const res = await axios.post('https://inmobiliaria-proyecto.onrender.com/api/usuarios/recuperar', { email });
+      const res = await api.post('/usuarios/recuperar', { email });
       setMensaje(res.data.mensaje);
     } catch (err) {
       setError(
