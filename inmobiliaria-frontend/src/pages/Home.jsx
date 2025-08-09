@@ -49,12 +49,24 @@ function Home() {
                   height="200"
                   image={prop.imagen_destacada}
                   alt={prop.titulo}
+                  sx={{ objectFit: "cover" }}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h6" gutterBottom>
                     {prop.titulo}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" paragraph>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    paragraph
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: "vertical",
+                    }}
+                  >
                     {prop.descripcion}
                   </Typography>
                   <Typography variant="body1">
