@@ -44,7 +44,7 @@ function DetallePropiedad() {
         <CardMedia
           component="img"
           height="400"
-          image={`https://inmobiliaria-proyecto.onrender.com/uploads/${propiedad.imagen_destacada}`}
+          image={propiedad.imagen_destacada}
           alt={propiedad.titulo}
         />
 

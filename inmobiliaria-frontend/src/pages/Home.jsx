@@ -47,7 +47,7 @@ function Home() {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={`https://inmobiliaria-proyecto.onrender.com/uploads/${prop.imagen_destacada}`}
+                  image={prop.imagen_destacada}
                   alt={prop.titulo}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>

@@ -64,7 +64,8 @@ function AdminPanel() {
     axios
       .post("https://inmobiliaria-proyecto.onrender.com/api/propiedades", formData, {
         headers: {
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       })
       .then(() => {
@@ -279,7 +280,7 @@ function AdminPanel() {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={`https://inmobiliaria-proyecto.onrender.com/uploads/${prop.imagen_destacada}`}
+                  image={prop.imagen_destacada}
                   alt={prop.titulo}
                 />
                 <CardContent>
