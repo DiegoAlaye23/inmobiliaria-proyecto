@@ -1,3 +1,4 @@
+export const palette = {
   primary: {
     main: '#1976d2',
     light: '#63a4ff',
@@ -22,32 +23,6 @@
   },
 };
 
-export const paletteDark = {
-  primary: {
-    main: '#90caf9',
-    light: '#e3f2fd',
-    dark: '#42a5f5',
-    contrastText: '#000000',
-  },
-  secondary: {
-    main: '#f48fb1',
-    light: '#f8bbd0',
-    dark: '#ad1457',
-    contrastText: '#000000',
-  },
-  neutral: {
-    main: '#b0bec5',
-    light: '#cfd8dc',
-    dark: '#78909c',
-    contrastText: '#000000',
-  },
-  background: {
-    default: '#121212',
-    paper: '#1e1e1e',
-  },
-};
-
-=======
 export const typography = {
   fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
   h1: {
