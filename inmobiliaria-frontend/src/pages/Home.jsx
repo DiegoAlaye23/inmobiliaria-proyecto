@@ -32,14 +32,14 @@ function Home() {
       </Typography>
 
       {Array.isArray(propiedades) && propiedades.length > 0 ? (
-        <Grid container spacing={4} justifyContent="center">
+        <Grid container spacing={4} justifyContent="center" alignItems="stretch">
           {propiedades.map((prop) => (
-            <Grid item key={prop.id} xs={12} sm={6} md={4}>
+            <Grid item key={prop.id} xs={12} sm={6} md={4} sx={{ display: "flex" }}>
               <Card
                 sx={{
-                  height: "100%",
                   display: "flex",
                   flexDirection: "column",
+                  flexGrow: 1,
                   borderRadius: 2,
                   boxShadow: 3,
                 }}
