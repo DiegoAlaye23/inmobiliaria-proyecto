@@ -7,7 +7,7 @@ import App from "./App";
 // Importa componentes de MUI para aplicar temas y estilos globales
 import { ThemeProvider, CssBaseline } from "@mui/material";
 // Importa una función personalizada que devuelve un tema según el modo (claro u oscuro)
-import { getTheme } from "./theme";
+import { getTheme } from "./design-system";
 
 // Componente raíz de la aplicación
 function Root() {
