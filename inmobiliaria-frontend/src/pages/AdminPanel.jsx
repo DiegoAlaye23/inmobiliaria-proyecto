@@ -15,6 +15,7 @@ import {
   Alert,
   FormControl,
   InputLabel,
+  MenuItem,
 } from "@mui/material";
 import { Delete, Edit, Save, Cancel } from "@mui/icons-material";
 
@@ -25,6 +26,10 @@ function AdminPanel() {
     descripcion: "",
     precio: "",
     ciudad: "",
+    ambientes: "",
+    banos: "",
+    cochera: "",
+    m2: "",
     imagen: null,
   });
   const [editandoId, setEditandoId] = useState(null);
@@ -58,7 +63,9 @@ function AdminPanel() {
     e.preventDefault();
     const formData = new FormData();
     Object.entries(nueva).forEach(([key, val]) => {
-      if (val) formData.append(key, val);
+      if (val !== null && val !== undefined && val !== "") {
+        formData.append(key, val);
+      }
     });
 
     axios
@@ -75,6 +82,10 @@ function AdminPanel() {
           descripcion: "",
           precio: "",
           ciudad: "",
+          ambientes: "",
+          banos: "",
+          cochera: "",
+          m2: "",
           imagen: null,
         });
       })
@@ -88,7 +99,10 @@ function AdminPanel() {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setEditData((prev) => ({ ...prev, [name]: value }));
+    setEditData((prev) => ({
+      ...prev,
+      [name]: name === "cochera" ? value === "true" || value === true : value,
+    }));
   };
 
   const handleSaveEdit = (id) => {
@@ -187,6 +201,57 @@ function AdminPanel() {
                 required
                 value={nueva.precio}
                 onChange={(e) => setNueva({ ...nueva, precio: e.target.value })}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Ambientes"
+                name="ambientes"
+                type="number"
+                fullWidth
+                required
+                value={nueva.ambientes}
+                onChange={(e) =>
+                  setNueva({ ...nueva, ambientes: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Baños"
+                name="banos"
+                type="number"
+                fullWidth
+                required
+                value={nueva.banos}
+                onChange={(e) => setNueva({ ...nueva, banos: e.target.value })}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                select
+                label="Cochera"
+                name="cochera"
+                fullWidth
+                required
+                value={nueva.cochera}
+                onChange={(e) =>
+                  setNueva({ ...nueva, cochera: e.target.value === "true" })
+                }
+              >
+                <MenuItem value={true}>Sí</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Metros cuadrados"
+                name="m2"
+                type="number"
+                fullWidth
+                required
+                value={nueva.m2}
+                onChange={(e) => setNueva({ ...nueva, m2: e.target.value })}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -315,6 +380,42 @@ function AdminPanel() {
                         name="ciudad"
                         label="Ciudad"
                         value={editData.ciudad}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      <TextField
+                        fullWidth
+                        name="ambientes"
+                        label="Ambientes"
+                        value={editData.ambientes}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      <TextField
+                        fullWidth
+                        name="banos"
+                        label="Baños"
+                        value={editData.banos}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      <TextField
+                        select
+                        fullWidth
+                        name="cochera"
+                        label="Cochera"
+                        value={editData.cochera}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      >
+                        <MenuItem value={true}>Sí</MenuItem>
+                        <MenuItem value={false}>No</MenuItem>
+                      </TextField>
+                      <TextField
+                        fullWidth
+                        name="m2"
+                        label="Metros cuadrados"
+                        value={editData.m2}
                         onChange={handleEditChange}
                         sx={{ mb: 1 }}
                       />
