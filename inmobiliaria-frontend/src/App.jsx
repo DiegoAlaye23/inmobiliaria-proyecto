@@ -11,10 +11,11 @@ import NotFound from './pages/NotFound';
 import Navbar from './components/Navbar';
 import RutaPrivadaAdmin from './components/RutaPrivadaAdmin'; // Protege rutas de acceso solo para admins
 import VerificarCuenta from './pages/VerificarCuenta';
-import UsuariosAdmin from './pages/UsuariosAdmin'; 
+import UsuariosAdmin from './pages/UsuariosAdmin';
 import MensajesAdmin from './pages/MensajesAdmin';
 import RecuperarPassword from './pages/RecuperarPassword';
 import RestablecerPassword from './pages/RestablecerPassword';
+import Footer from './components/Footer';
 
 // Función principal del componente App
 function App({ setModo, modo }) {
@@ -45,6 +46,7 @@ function App({ setModo, modo }) {
         {/* Ruta para manejar páginas no encontradas */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
