@@ -2,7 +2,6 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const path = require('path');
 
 // Inicializamos la app de Express
 const app = express();
@@ -18,7 +17,6 @@ const healthRoutes = require('./routes/health.routes');
 // Middlewares
 app.use(cors()); // Permite peticiones de distintos orígenes (frontend-backend)
 app.use(express.json()); // Permite recibir y procesar JSON en las peticiones
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Carpeta pública para archivos subidos
 
 // Rutas principales
 app.use('/api/usuarios', usuarioRoutes);
