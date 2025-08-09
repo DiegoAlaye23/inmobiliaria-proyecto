@@ -2,13 +2,13 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Button,
   IconButton,
   Menu,
   MenuItem,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
+import { AppButton } from "../design-system";
 import { Brightness4, Brightness7, Menu as MenuIcon } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -126,33 +126,33 @@ function Navbar({ setModo, modo }) {
 
             {!usuario && (
               <>
-                <Button color="inherit" component={Link} to="/login">
+                <AppButton variant="text" color="inherit" component={Link} to="/login">
                   Login
-                </Button>
-                <Button color="inherit" component={Link} to="/registro">
+                </AppButton>
+                <AppButton variant="text" color="inherit" component={Link} to="/registro">
                   Registrarse
-                </Button>
+                </AppButton>
               </>
             )}
 
             {usuario?.rol === "admin" && (
               <>
-                <Button color="inherit" component={Link} to="/admin">
+                <AppButton variant="text" color="inherit" component={Link} to="/admin">
                   Admin
-                </Button>
-                <Button color="inherit" component={Link} to="/admin/usuarios">
+                </AppButton>
+                <AppButton variant="text" color="inherit" component={Link} to="/admin/usuarios">
                   Usuarios
-                </Button>
-                <Button color="inherit" component={Link} to="/admin/mensajes">
+                </AppButton>
+                <AppButton variant="text" color="inherit" component={Link} to="/admin/mensajes">
                   Mensajes
-                </Button>
+                </AppButton>
               </>
             )}
 
             {token && (
-              <Button color="inherit" onClick={logout}>
+              <AppButton variant="text" color="inherit" onClick={logout}>
                 Salir
-              </Button>
+              </AppButton>
             )}
           </div>
         )}
