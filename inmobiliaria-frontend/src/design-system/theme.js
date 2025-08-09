@@ -1,9 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { palette, typography } from './tokens.js';
-
-export const getTheme = (mode) =>
-  createTheme({
-    palette: { ...palette, mode },
+main
     typography,
     components: {
       MuiButton: {
