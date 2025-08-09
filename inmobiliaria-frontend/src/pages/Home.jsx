@@ -9,20 +9,39 @@ import {
   CardActions,
   Button,
   Grid,
+  TextField,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
 function Home() {
   const [propiedades, setPropiedades] = useState([]);
+  const [ciudad, setCiudad] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [minPrecio, setMinPrecio] = useState("");
+  const [maxPrecio, setMaxPrecio] = useState("");
+  const [ambientes, setAmbientes] = useState("");
 
-  useEffect(() => {
+  const fetchPropiedades = () => {
+    const params = {};
+    if (ciudad) params.ciudad = ciudad;
+    if (tipo) params.tipo = tipo;
+    if (minPrecio) params.minPrecio = minPrecio;
+    if (maxPrecio) params.maxPrecio = maxPrecio;
+    if (ambientes) params.ambientes = ambientes;
+
     axios
-      .get("https://inmobiliaria-proyecto.onrender.com/api/propiedades")
+      .get("https://inmobiliaria-proyecto.onrender.com/api/propiedades", {
+        params,
+      })
       .then((res) => {
         console.log("Respuesta del backend:", res.data);
         setPropiedades(res.data);
       })
       .catch((err) => console.error("Error al cargar propiedades:", err));
+  };
+
+  useEffect(() => {
+    fetchPropiedades();
   }, []);
 
   return (
@@ -30,6 +49,49 @@ function Home() {
       <Typography variant="h4" component="h1" gutterBottom textAlign="center">
         Propiedades Disponibles
       </Typography>
+
+      {/* Filtros */}
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 2,
+          mb: 4,
+          justifyContent: "center",
+        }}
+      >
+        <TextField
+          label="Ciudad"
+          value={ciudad}
+          onChange={(e) => setCiudad(e.target.value)}
+        />
+        <TextField
+          label="Tipo de Propiedad"
+          value={tipo}
+          onChange={(e) => setTipo(e.target.value)}
+        />
+        <TextField
+          label="Precio Mínimo"
+          type="number"
+          value={minPrecio}
+          onChange={(e) => setMinPrecio(e.target.value)}
+        />
+        <TextField
+          label="Precio Máximo"
+          type="number"
+          value={maxPrecio}
+          onChange={(e) => setMaxPrecio(e.target.value)}
+        />
+        <TextField
+          label="Ambientes"
+          type="number"
+          value={ambientes}
+          onChange={(e) => setAmbientes(e.target.value)}
+        />
+        <Button variant="contained" onClick={fetchPropiedades}>
+          Buscar
+        </Button>
+      </Box>
 
       {Array.isArray(propiedades) && propiedades.length > 0 ? (
         <Grid container spacing={4} justifyContent="center" alignItems="stretch">

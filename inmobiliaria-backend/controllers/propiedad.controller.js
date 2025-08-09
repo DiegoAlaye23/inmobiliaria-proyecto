@@ -4,9 +4,17 @@ const path = require("path");
 const supabase = require("../config/supabase");
 
 // GET /api/propiedades
-// Obtener todas las propiedades
+// Obtener todas las propiedades con filtros opcionales
 const obtenerPropiedades = (req, res) => {
-  Propiedad.getTodasLasPropiedades((err, resultados) => {
+  const filtros = {
+    ciudad: req.query.ciudad,
+    minPrecio: req.query.minPrecio,
+    maxPrecio: req.query.maxPrecio,
+    tipo: req.query.tipo,
+    ambientes: req.query.ambientes,
+  };
+
+  Propiedad.getTodasLasPropiedades(filtros, (err, resultados) => {
     if (err) {
       res.status(500).json({ error: "Error al obtener propiedades" });
     } else {

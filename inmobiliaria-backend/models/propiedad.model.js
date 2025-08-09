@@ -2,10 +2,35 @@
 const db = require('../config/db');
 
 /**
- * Obtener todas las propiedades registradas
+ * Obtener todas las propiedades registradas con filtros opcionales
  */
-const getTodasLasPropiedades = (callback) => {
-  db.query('SELECT * FROM propiedades', callback);
+const getTodasLasPropiedades = (filtros = {}, callback) => {
+  let sql = 'SELECT * FROM propiedades WHERE 1=1';
+  const valores = [];
+  let idx = 1;
+
+  if (filtros.ciudad) {
+    sql += ` AND LOWER(ciudad) LIKE LOWER($${idx++})`;
+    valores.push(`%${filtros.ciudad}%`);
+  }
+  if (filtros.minPrecio) {
+    sql += ` AND precio >= $${idx++}`;
+    valores.push(filtros.minPrecio);
+  }
+  if (filtros.maxPrecio) {
+    sql += ` AND precio <= $${idx++}`;
+    valores.push(filtros.maxPrecio);
+  }
+  if (filtros.tipo) {
+    sql += ` AND tipo = $${idx++}`;
+    valores.push(filtros.tipo);
+  }
+  if (filtros.ambientes) {
+    sql += ` AND ambientes >= $${idx++}`;
+    valores.push(filtros.ambientes);
+  }
+
+  db.query(sql, valores, callback);
 };
 
 /**
