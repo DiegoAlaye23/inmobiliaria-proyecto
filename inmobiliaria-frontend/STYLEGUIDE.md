@@ -6,6 +6,7 @@ Este documento reúne las bases visuales para la interfaz del proyecto.
 
 ### Modo claro
 
+=======
 | Token | Hex | Uso |
 | --- | --- | --- |
 | `primary.main` | `#1976d2` | Acciones principales y enlaces destacados |
@@ -24,6 +25,7 @@ Este documento reúne las bases visuales para la interfaz del proyecto.
 | `background.default` | `#121212` | Fondo general de la aplicación |
 | `background.paper` | `#1e1e1e` | Tarjetas y contenedores |
 
+=======
 ## Tipografía
 
 - **Fuente base:** `Roboto, Helvetica, Arial, sans-serif`

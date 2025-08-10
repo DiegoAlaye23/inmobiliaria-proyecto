@@ -4,6 +4,8 @@ import { paletteLight, paletteDark, typography } from './tokens.js';
 export const getTheme = (mode) => {
   return createTheme({
     palette: { ...(mode === 'dark' ? paletteDark : paletteLight), mode },
+=======
+main
     typography,
     components: {
       MuiButton: {
@@ -16,5 +18,6 @@ export const getTheme = (mode) => {
     },
   });
 };
+=======
 
 export default getTheme;
