@@ -1,3 +1,5 @@
+export const palette = {
+=======
 export const paletteLight = {
 =======
 =======
@@ -25,6 +27,7 @@ export const paletteLight = {
   },
 };
 
+=======
 export const paletteDark = {
   primary: {
     main: '#90caf9',

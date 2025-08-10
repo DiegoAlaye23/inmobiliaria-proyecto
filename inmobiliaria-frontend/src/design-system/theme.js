@@ -1,4 +1,10 @@
 import { createTheme } from '@mui/material/styles';
+import { palette, typography } from './tokens.js';
+
+export const getTheme = (mode) =>
+  createTheme({
+    palette: { ...palette, mode },
+=======
 import { paletteLight, paletteDark, typography } from './tokens.js';
 
 export const getTheme = (mode) => {
