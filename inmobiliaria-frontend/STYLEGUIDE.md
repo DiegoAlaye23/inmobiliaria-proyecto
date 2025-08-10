@@ -4,6 +4,10 @@ Este documento reúne las bases visuales para la interfaz del proyecto.
 
 ## Colores
 
+### Modo claro
+
+=======
+=======
 | Token | Hex | Uso |
 | --- | --- | --- |
 | `primary.main` | `#1976d2` | Acciones principales y enlaces destacados |
@@ -12,6 +16,18 @@ Este documento reúne las bases visuales para la interfaz del proyecto.
 | `background.default` | `#f5f5f5` | Fondo general de la aplicación |
 | `background.paper` | `#ffffff` | Tarjetas y contenedores |
 
+### Modo oscuro
+
+| Token | Hex | Uso |
+| --- | --- | --- |
+| `primary.main` | `#90caf9` | Acciones principales en modo oscuro |
+| `secondary.main` | `#f48fb1` | Acciones secundarias o de énfasis |
+| `neutral.main` | `#b0bec5` | Elementos neutrales y texto complementario |
+| `background.default` | `#121212` | Fondo general de la aplicación |
+| `background.paper` | `#1e1e1e` | Tarjetas y contenedores |
+
+=======
+=======
 ## Tipografía
 
 - **Fuente base:** `Roboto, Helvetica, Arial, sans-serif`
