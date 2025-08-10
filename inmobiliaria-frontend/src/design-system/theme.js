@@ -5,7 +5,7 @@ export const getTheme = (mode) => {
   return createTheme({
     palette: { ...(mode === 'dark' ? paletteDark : paletteLight), mode },
 =======
-main
+=======
     typography,
     components: {
       MuiButton: {
@@ -18,6 +18,7 @@ main
     },
   });
 };
+=======
 =======
 
 export default getTheme;

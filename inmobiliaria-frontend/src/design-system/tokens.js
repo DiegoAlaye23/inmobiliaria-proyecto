@@ -1,5 +1,6 @@
 export const paletteLight = {
 =======
+=======
   primary: {
     main: '#1976d2',
     light: '#63a4ff',
@@ -49,6 +50,7 @@ export const paletteDark = {
   },
 };
 
+=======
 =======
 =======
 export const typography = {
