@@ -1,4 +1,3 @@
-
 export const paletteLight = {
   primary: {
     main: '#1976d2',
@@ -23,7 +22,6 @@ export const paletteLight = {
     paper: '#ffffff',
   },
 };
-
 
 export const paletteDark = {
   primary: {
@@ -75,3 +73,5 @@ export const typography = {
     fontWeight: 600,
   },
 };
+
+
