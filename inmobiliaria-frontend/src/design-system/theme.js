@@ -6,7 +6,7 @@ export const getTheme = (mode) => {
   const palette = Object.assign({ mode }, basePalette);
 
   return createTheme({
-    palette,
+    palette: { ...(mode === 'dark' ? paletteDark : paletteLight), mode },
     typography,
     components: {
       MuiButton: {
@@ -21,4 +21,5 @@ export const getTheme = (mode) => {
 };
 
 export default getTheme;
+
 
