@@ -42,6 +42,4 @@ Este documento reúne las bases visuales para la interfaz del proyecto.
 import { AppButton } from './design-system';
 
 <AppButton>Acción</AppButton>
-```
 
-El sistema de diseño se expone desde `src/design-system`, donde también se definen los tokens de color y tipografía.

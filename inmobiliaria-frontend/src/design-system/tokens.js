@@ -73,3 +73,4 @@ export const typography = {
     fontWeight: 600,
   },
 };
+

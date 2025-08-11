@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import { paletteLight, paletteDark, typography } from './tokens.js';
 
-export function getTheme(mode) {
+export const getTheme = (mode) => {
   const basePalette = mode === 'dark' ? paletteDark : paletteLight;
   const palette = Object.assign({ mode }, basePalette);
 
@@ -18,6 +18,7 @@ export function getTheme(mode) {
       },
     },
   });
-}
+};
 
 export default getTheme;
+
