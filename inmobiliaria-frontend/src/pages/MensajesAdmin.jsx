@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/axios.js";
 import {
   Box,
   Typography,
@@ -16,13 +16,9 @@ function MensajesAdmin() {
   const [mensajes, setMensajes] = useState([]);
   const [error, setError] = useState("");
 
-  const token = localStorage.getItem("token");
-
   const cargarMensajes = () => {
-    axios
-      .get("https://inmobiliaria-proyecto.onrender.com/api/mensajes", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    api
+      .get("/mensajes")
       .then((res) => setMensajes(res.data))
       .catch((err) => {
         console.error("Error al obtener mensajes", err);
@@ -31,10 +27,8 @@ function MensajesAdmin() {
   };
 
   const handleEliminarMensaje = (id) => {
-    axios
-      .delete(`https://inmobiliaria-proyecto.onrender.com/api/mensajes/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    api
+      .delete(`/mensajes/${id}`)
       .then(() => cargarMensajes())
       .catch(() => alert("Error al eliminar mensaje"));
   };

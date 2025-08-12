@@ -1,6 +1,6 @@
 // src/pages/UsuariosAdmin.jsx
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../config/axios.js';
 import {
   Box,
   Typography,
@@ -19,17 +19,14 @@ function UsuariosAdmin() {
   const [usuarios, setUsuarios] = useState([]);
   const [snackbar, setSnackbar] = useState({ open: false, mensaje: '', tipo: 'success' });
 
-  const token = localStorage.getItem('token');
-  const headers = { Authorization: `Bearer ${token}` };
-
   const cargarUsuarios = () => {
-    axios.get('https://inmobiliaria-proyecto.onrender.com/api/usuarios', { headers })
+    api.get('/usuarios')
       .then((res) => setUsuarios(res.data))
       .catch(() => setSnackbar({ open: true, mensaje: 'Error al cargar usuarios', tipo: 'error' }));
   };
 
   const cambiarRol = (id, nuevoRol) => {
-    axios.patch(`https://inmobiliaria-proyecto.onrender.com/api/usuarios/rol/${id}`, { rol: nuevoRol }, { headers })
+    api.patch(`/usuarios/rol/${id}`, { rol: nuevoRol })
       .then(() => {
         setSnackbar({ open: true, mensaje: 'Rol actualizado', tipo: 'success' });
         cargarUsuarios();
@@ -38,7 +35,7 @@ function UsuariosAdmin() {
   };
 
   const cambiarEstado = (id, nuevoEstado) => {
-    axios.patch(`https://inmobiliaria-proyecto.onrender.com/api/usuarios/estado/${id}`, { activo: nuevoEstado }, { headers })
+    api.patch(`/usuarios/estado/${id}`, { activo: nuevoEstado })
       .then(() => {
         setSnackbar({ open: true, mensaje: 'Estado actualizado', tipo: 'success' });
         cargarUsuarios();
