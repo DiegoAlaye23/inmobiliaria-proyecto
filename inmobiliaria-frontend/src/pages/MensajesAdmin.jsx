@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/axios.js";
 import {
   Box,
   Typography,
@@ -19,8 +19,8 @@ function MensajesAdmin() {
   const token = localStorage.getItem("token");
 
   const cargarMensajes = () => {
-    axios
-      .get("https://inmobiliaria-proyecto.onrender.com/api/mensajes", {
+    api
+      .get("/mensajes", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setMensajes(res.data))
@@ -31,8 +31,8 @@ function MensajesAdmin() {
   };
 
   const handleEliminarMensaje = (id) => {
-    axios
-      .delete(`https://inmobiliaria-proyecto.onrender.com/api/mensajes/${id}`, {
+    api
+      .delete(`/mensajes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => cargarMensajes())
