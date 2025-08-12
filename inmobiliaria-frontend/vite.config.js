@@ -5,10 +5,4 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: "/",
-  build: {
-    rollupOptions: {
-      // externalize missing peer dependency to avoid bundling errors
-      external: ['prop-types'],
-    },
-  },
 })
