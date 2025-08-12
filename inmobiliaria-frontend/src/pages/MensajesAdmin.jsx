@@ -16,13 +16,10 @@ function MensajesAdmin() {
   const [mensajes, setMensajes] = useState([]);
   const [error, setError] = useState("");
 
-  const token = localStorage.getItem("token");
-
   const cargarMensajes = () => {
     api
-      .get("/mensajes", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get("/mensajes")
+
       .then((res) => setMensajes(res.data))
       .catch((err) => {
         console.error("Error al obtener mensajes", err);
@@ -32,9 +29,8 @@ function MensajesAdmin() {
 
   const handleEliminarMensaje = (id) => {
     api
-      .delete(`/mensajes/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .delete(`/mensajes/${id}`)
+
       .then(() => cargarMensajes())
       .catch(() => alert("Error al eliminar mensaje"));
   };
