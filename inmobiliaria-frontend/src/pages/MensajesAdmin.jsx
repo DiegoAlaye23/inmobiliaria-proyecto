@@ -19,6 +19,7 @@ function MensajesAdmin() {
   const cargarMensajes = () => {
     api
       .get("/mensajes")
+
       .then((res) => setMensajes(res.data))
       .catch((err) => {
         console.error("Error al obtener mensajes", err);
@@ -29,6 +30,7 @@ function MensajesAdmin() {
   const handleEliminarMensaje = (id) => {
     api
       .delete(`/mensajes/${id}`)
+
       .then(() => cargarMensajes())
       .catch(() => alert("Error al eliminar mensaje"));
   };
