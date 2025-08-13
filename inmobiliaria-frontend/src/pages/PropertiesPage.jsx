@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Chip from '@mui/material/Chip';
-import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
@@ -11,7 +9,9 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import FiltersBar from '../components/FiltersBar';
-import MobileFiltersDrawer from '../components/MobileFiltersDrawer';
+import FiltersTrigger from '../components/FiltersTrigger';
+import FiltersDrawer from '../components/FiltersDrawer';
+import FiltersChips from '../components/FiltersChips';
 import PropertyCard from '../components/PropertyCard';
 import usePropertyFilters from '../hooks/usePropertyFilters';
 
@@ -52,6 +52,7 @@ export default function PropertiesPage() {
   const { filters, debouncedFilters, setFilter, clearFilters } = usePropertyFilters();
   const [sort, setSort] = useState('date');
   const [loading, setLoading] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -80,43 +81,30 @@ export default function PropertiesPage() {
     return arr;
   }, [filtered, sort]);
 
-  const activeChips = [];
-  if (filters.city) activeChips.push({ key: 'city', label: `Ciudad: ${filters.city}` });
-  if (filters.type) activeChips.push({ key: 'type', label: `Tipo: ${filters.type}` });
-  if (filters.price[0] || filters.price[1] !== 1000000)
-    activeChips.push({ key: 'price', label: `Precio: ${filters.price[0]} - ${filters.price[1]}` });
-  if (filters.rooms) activeChips.push({ key: 'rooms', label: `Ambientes: ${filters.rooms}` });
-  if (filters.neighborhood)
-    activeChips.push({ key: 'neighborhood', label: `Barrio: ${filters.neighborhood}` });
-
   return (
     <Box sx={{ p: 2 }}>
       {isMobile ? (
-        <MobileFiltersDrawer filters={filters} setFilter={setFilter} clearFilters={clearFilters} />
+        <>
+          <FiltersTrigger onClick={() => setDrawerOpen(true)} />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>
+            <Select value={sort} onChange={e => setSort(e.target.value)} size="small">
+              <MenuItem value="date">Fecha</MenuItem>
+              <MenuItem value="price-asc">Precio ↑</MenuItem>
+              <MenuItem value="price-desc">Precio ↓</MenuItem>
+            </Select>
+          </Box>
+        </>
       ) : (
-        <FiltersBar filters={filters} setFilter={setFilter} />
+        <FiltersBar
+          filters={filters}
+          setFilter={setFilter}
+          sort={sort}
+          setSort={setSort}
+          onOpen={() => setDrawerOpen(true)}
+        />
       )}
 
-      <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-        {activeChips.map(chip => (
-          <Chip
-            key={chip.key}
-            label={chip.label}
-            onDelete={() => setFilter(chip.key, chip.key === 'price' ? [0, 1000000] : '')}
-          />
-        ))}
-        {activeChips.length ? (
-          <Button onClick={clearFilters}>Limpiar filtros</Button>
-        ) : null}
-      </Box>
-
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>
-        <Select value={sort} onChange={e => setSort(e.target.value)} size="small">
-          <MenuItem value="date">Fecha</MenuItem>
-          <MenuItem value="price-asc">Precio ↑</MenuItem>
-          <MenuItem value="price-desc">Precio ↓</MenuItem>
-        </Select>
-      </Box>
+      <FiltersChips filters={filters} setFilter={setFilter} clearFilters={clearFilters} />
 
       {loading ? (
         <Grid container spacing={2}>
@@ -139,6 +127,14 @@ export default function PropertiesPage() {
           <Typography>No hay resultados.</Typography>
         </Box>
       )}
+
+      <FiltersDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        filters={filters}
+        setFilter={setFilter}
+        clearFilters={clearFilters}
+      />
     </Box>
   );
 }
