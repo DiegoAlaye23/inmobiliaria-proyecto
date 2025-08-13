@@ -92,9 +92,24 @@ export default function PropertiesPage() {
   return (
     <Box sx={{ p: 2 }}>
       {isMobile ? (
-        <MobileFiltersDrawer filters={filters} setFilter={setFilter} clearFilters={clearFilters} />
+        <>
+          <MobileFiltersDrawer filters={filters} setFilter={setFilter} clearFilters={clearFilters} />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>
+            <Select value={sort} onChange={e => setSort(e.target.value)} size="small">
+              <MenuItem value="date">Fecha</MenuItem>
+              <MenuItem value="price-asc">Precio ↑</MenuItem>
+              <MenuItem value="price-desc">Precio ↓</MenuItem>
+            </Select>
+          </Box>
+        </>
       ) : (
-        <FiltersBar filters={filters} setFilter={setFilter} />
+        <FiltersBar
+          filters={filters}
+          setFilter={setFilter}
+          sort={sort}
+          setSort={setSort}
+          clearFilters={clearFilters}
+        />
       )}
 
       <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -108,14 +123,6 @@ export default function PropertiesPage() {
         {activeChips.length ? (
           <Button onClick={clearFilters}>Limpiar filtros</Button>
         ) : null}
-      </Box>
-
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>
-        <Select value={sort} onChange={e => setSort(e.target.value)} size="small">
-          <MenuItem value="date">Fecha</MenuItem>
-          <MenuItem value="price-asc">Precio ↑</MenuItem>
-          <MenuItem value="price-desc">Precio ↓</MenuItem>
-        </Select>
       </Box>
 
       {loading ? (
