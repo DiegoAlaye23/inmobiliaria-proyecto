@@ -20,14 +20,27 @@ function MobileFiltersDrawer({ filters, setFilter, clearFilters }: any) {
 
   return (
     <>
-      <Button
-        variant="contained"
-        startIcon={<FilterListIcon />}
-        onClick={toggleDrawer}
-        sx={{ position: 'sticky', top: 0, zIndex: 1200, m: 1 }}
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 16,
+          left: 0,
+          right: 0,
+          p: 1,
+          backgroundColor: 'background.default',
+          zIndex: 1200,
+          display: open ? 'none' : 'block'
+        }}
       >
-        Filtrar
-      </Button>
+        <Button
+          fullWidth
+          variant="contained"
+          startIcon={<FilterListIcon />}
+          onClick={toggleDrawer}
+        >
+          Filtrar
+        </Button>
+      </Box>
       <Drawer anchor="bottom" open={open} onClose={toggleDrawer}>
         <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
