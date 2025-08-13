@@ -5,24 +5,22 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Slider from '@mui/material/Slider';
-import IconButton from '@mui/material/IconButton';
-import Popover from '@mui/material/Popover';
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import TuneIcon from '@mui/icons-material/Tune';
+import IconButton from '@mui/material/IconButton';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
+import FiltersForm from './FiltersForm';
 
-function FiltersBar({ filters, setFilter }: any) {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-  const handleMore = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => setAnchorEl(null);
+function FiltersBar({ filters, setFilter, sort, setSort, clearFilters }: any) {
+  const [open, setOpen] = useState(false);
+  const toggleDrawer = () => setOpen(prev => !prev);
 
   return (
-    <Box>
+    <>
       <Toolbar disableGutters sx={{ gap: 2, flexWrap: 'wrap' }}>
         <TextField
           size="small"
@@ -43,58 +41,52 @@ function FiltersBar({ filters, setFilter }: any) {
             <MenuItem value="Departamento">Departamento</MenuItem>
           </Select>
         </FormControl>
-        <Box sx={{ width: 160, px: 1 }}>
-          <Slider
-            value={filters.price}
-            onChange={(_, val) => setFilter('price', val)}
-            valueLabelDisplay="auto"
-            min={0}
-            max={1000000}
-          />
-        </Box>
-        <FormControl size="small" sx={{ minWidth: 120 }}>
-          <InputLabel id="rooms-label">Ambientes</InputLabel>
+        <FormControl size="small" sx={{ minWidth: 160 }}>
+          <InputLabel id="sort-label">Ordenar</InputLabel>
           <Select
-            labelId="rooms-label"
-            label="Ambientes"
-            value={filters.rooms}
-            onChange={e => setFilter('rooms', e.target.value)}
+            labelId="sort-label"
+            label="Ordenar"
+            value={sort}
+            onChange={e => setSort(e.target.value)}
           >
-            <MenuItem value="">Cualquiera</MenuItem>
-            {[1, 2, 3, 4].map(n => (
-              <MenuItem key={n} value={String(n)}>
-                {n}
-              </MenuItem>
-            ))}
+            <MenuItem value="date">Fecha</MenuItem>
+            <MenuItem value="price-asc">Precio ↑</MenuItem>
+            <MenuItem value="price-desc">Precio ↓</MenuItem>
           </Select>
         </FormControl>
-        <IconButton color="primary" onClick={handleMore} aria-label="más filtros">
-          <TuneIcon />
-        </IconButton>
+        <Button startIcon={<FilterListIcon />} onClick={toggleDrawer} variant="outlined">
+          Más filtros
+        </Button>
       </Toolbar>
-      <Popover
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      >
-        <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Typography variant="subtitle2">Más filtros</Typography>
-          <TextField
-            size="small"
-            label="Barrio"
-            value={filters.neighborhood || ''}
-            onChange={e => setFilter('neighborhood', e.target.value)}
-          />
+      <Drawer anchor="right" open={open} onClose={toggleDrawer} PaperProps={{ sx: { width: 340 } }}>
+        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="h6">Filtros</Typography>
+            <IconButton onClick={toggleDrawer}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Box sx={{ p: 2, pt: 0, overflow: 'auto', flex: 1 }}>
+            <FiltersForm filters={filters} setFilter={setFilter} />
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, p: 2, borderTop: 1, borderColor: 'divider' }}>
+            <Button onClick={clearFilters}>Limpiar</Button>
+            <Button variant="contained" onClick={toggleDrawer}>
+              Aplicar
+            </Button>
+          </Box>
         </Box>
-      </Popover>
-    </Box>
+      </Drawer>
+    </>
   );
 }
 
 FiltersBar.propTypes = {
   filters: PropTypes.object.isRequired,
-  setFilter: PropTypes.func.isRequired
+  setFilter: PropTypes.func.isRequired,
+  sort: PropTypes.string.isRequired,
+  setSort: PropTypes.func.isRequired,
+  clearFilters: PropTypes.func.isRequired
 };
 
 export default FiltersBar;
