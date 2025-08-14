@@ -1,5 +1,7 @@
 // Importa componentes necesarios del sistema de rutas de React Router
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
 // Importa las páginas que se mostrarán según la ruta
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -24,28 +26,32 @@ function App({ setModo, modo }) {
     <BrowserRouter>
       {/* Barra de navegación, recibe props para cambiar el modo claro/oscuro */}
       <Navbar setModo={setModo} modo={modo} />
-      {/* Define las rutas disponibles */}
-      <Routes>
-        {/* Ruta de inicio */}
-        <Route path="/" element={<Home />} />
-        {/* Autenticación */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Register />} />
-        <Route path="/recuperar" element={<RecuperarPassword />} />
-        <Route path="/restablecer/:token" element={<RestablecerPassword />} />
-        {/* Verificación de cuenta por token */}
-        <Route path="/verificar/:token" element={<VerificarCuenta />} />
-        {/* Detalle de una propiedad específica */}
-        <Route path="/propiedad/:id" element={<DetallePropiedad />} />
-        {/* Página de contacto */}
-        <Route path="/contacto" element={<Contacto />} />
-        {/* Rutas protegidas solo para administradores */}
-        <Route path="/admin" element={<RutaPrivadaAdmin><AdminPanel /></RutaPrivadaAdmin>} />
-        <Route path="/admin/usuarios" element={<RutaPrivadaAdmin><UsuariosAdmin /></RutaPrivadaAdmin>} />
-        <Route path="/admin/mensajes" element={<RutaPrivadaAdmin><MensajesAdmin /></RutaPrivadaAdmin>} />
-        {/* Ruta para manejar páginas no encontradas */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Toolbar />
+      {/* Contenido principal */}
+      <Box component="main" sx={{ pb: 8 }}>
+        {/* Define las rutas disponibles */}
+        <Routes>
+          {/* Ruta de inicio */}
+          <Route path="/" element={<Home />} />
+          {/* Autenticación */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Register />} />
+          <Route path="/recuperar" element={<RecuperarPassword />} />
+          <Route path="/restablecer/:token" element={<RestablecerPassword />} />
+          {/* Verificación de cuenta por token */}
+          <Route path="/verificar/:token" element={<VerificarCuenta />} />
+          {/* Detalle de una propiedad específica */}
+          <Route path="/propiedad/:id" element={<DetallePropiedad />} />
+          {/* Página de contacto */}
+          <Route path="/contacto" element={<Contacto />} />
+          {/* Rutas protegidas solo para administradores */}
+          <Route path="/admin" element={<RutaPrivadaAdmin><AdminPanel /></RutaPrivadaAdmin>} />
+          <Route path="/admin/usuarios" element={<RutaPrivadaAdmin><UsuariosAdmin /></RutaPrivadaAdmin>} />
+          <Route path="/admin/mensajes" element={<RutaPrivadaAdmin><MensajesAdmin /></RutaPrivadaAdmin>} />
+          {/* Ruta para manejar páginas no encontradas */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Box>
       <Footer />
     </BrowserRouter>
   );
