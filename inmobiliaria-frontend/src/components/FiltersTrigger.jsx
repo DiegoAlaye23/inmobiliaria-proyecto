@@ -9,35 +9,29 @@ function FiltersTrigger({ onClick }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  if (isMobile) {
-    return (
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 16,
-          left: 0,
-          right: 0,
-          p: 1,
-          backgroundColor: 'background.default',
-          zIndex: 1200
-        }}
-      >
-        <Button
-          fullWidth
-          variant="contained"
-          startIcon={<FilterListIcon />}
-          onClick={onClick}
-        >
-          Filtrar
-        </Button>
-      </Box>
-    );
-  }
+  if (!isMobile) return null;
 
   return (
-    <Button startIcon={<FilterListIcon />} onClick={onClick} variant="outlined">
-      Más filtros
-    </Button>
+    <Box
+      sx={{
+        position: 'fixed',
+        bottom: 16,
+        left: 0,
+        right: 0,
+        p: 1,
+        backgroundColor: 'background.default',
+        zIndex: 1200
+      }}
+    >
+      <Button
+        fullWidth
+        variant="contained"
+        startIcon={<FilterListIcon />}
+        onClick={onClick}
+      >
+        Filtrar
+      </Button>
+    </Box>
   );
 }
 

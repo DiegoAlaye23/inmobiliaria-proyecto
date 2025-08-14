@@ -1,22 +1,70 @@
 import Toolbar from '@mui/material/Toolbar';
-import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import PropTypes from 'prop-types';
-import FiltersTrigger from './FiltersTrigger';
 
-function FiltersBar({ filters, setFilter, sort, setSort, onOpen }: any) {
+const cities = ['CABA', 'Córdoba', 'Rosario', 'La Plata'];
+const minPrices = [0, 50000, 100000, 150000];
+const maxPrices = [50000, 100000, 150000, 200000];
+const types = ['Casa', 'Departamento', 'PH', 'Terreno'];
+
+function FiltersBar({ filters, setFilter }: any) {
   return (
     <Toolbar disableGutters sx={{ gap: 2, flexWrap: 'wrap' }}>
-      <TextField
-        size="small"
-        label="Ciudad"
-        value={filters.city}
-        onChange={e => setFilter('city', e.target.value)}
-      />
       <FormControl size="small" sx={{ minWidth: 120 }}>
+        <InputLabel id="city-label">Ciudad</InputLabel>
+        <Select
+          labelId="city-label"
+          label="Ciudad"
+          value={filters.city}
+          onChange={e => setFilter('city', e.target.value)}
+        >
+          <MenuItem value="">Todas</MenuItem>
+          {cities.map(city => (
+            <MenuItem key={city} value={city}>
+              {city}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl size="small" sx={{ minWidth: 140 }}>
+        <InputLabel id="min-label">Precio mínimo</InputLabel>
+        <Select
+          labelId="min-label"
+          label="Precio mínimo"
+          value={filters.minPrice}
+          onChange={e => setFilter('minPrice', e.target.value)}
+        >
+          <MenuItem value="">Sin mínimo</MenuItem>
+          {minPrices.map(price => (
+            <MenuItem key={price} value={price}>
+              {'$' + price}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl size="small" sx={{ minWidth: 140 }}>
+        <InputLabel id="max-label">Precio máximo</InputLabel>
+        <Select
+          labelId="max-label"
+          label="Precio máximo"
+          value={filters.maxPrice}
+          onChange={e => setFilter('maxPrice', e.target.value)}
+        >
+          <MenuItem value="">Sin máximo</MenuItem>
+          {maxPrices.map(price => (
+            <MenuItem key={price} value={price}>
+              {price === 200000 ? '200000+' : '$' + price}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl size="small" sx={{ minWidth: 150 }}>
         <InputLabel id="type-label">Tipo</InputLabel>
         <Select
           labelId="type-label"
@@ -24,35 +72,21 @@ function FiltersBar({ filters, setFilter, sort, setSort, onOpen }: any) {
           value={filters.type}
           onChange={e => setFilter('type', e.target.value)}
         >
-          <MenuItem value="">Cualquiera</MenuItem>
-          <MenuItem value="Casa">Casa</MenuItem>
-          <MenuItem value="Departamento">Departamento</MenuItem>
+          <MenuItem value="">Todos</MenuItem>
+          {types.map(t => (
+            <MenuItem key={t} value={t}>
+              {t}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
-      <FormControl size="small" sx={{ minWidth: 160 }}>
-        <InputLabel id="sort-label">Ordenar</InputLabel>
-        <Select
-          labelId="sort-label"
-          label="Ordenar"
-          value={sort}
-          onChange={e => setSort(e.target.value)}
-        >
-          <MenuItem value="date">Fecha</MenuItem>
-          <MenuItem value="price-asc">Precio ↑</MenuItem>
-          <MenuItem value="price-desc">Precio ↓</MenuItem>
-        </Select>
-      </FormControl>
-      <FiltersTrigger onClick={onOpen} />
     </Toolbar>
   );
 }
 
 FiltersBar.propTypes = {
   filters: PropTypes.object.isRequired,
-  setFilter: PropTypes.func.isRequired,
-  sort: PropTypes.string.isRequired,
-  setSort: PropTypes.func.isRequired,
-  onOpen: PropTypes.func.isRequired
+  setFilter: PropTypes.func.isRequired
 };
 
 export default FiltersBar;
