@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import api from "../config/axios";
 import {
   Box,
   Typography,
@@ -17,6 +18,10 @@ function DetallePropiedad() {
   const { id } = useParams();
   const [propiedad, setPropiedad] = useState(null);
   const [error, setError] = useState("");
+  const [esFavorito, setEsFavorito] = useState(false);
+  const [mensaje, setMensaje] = useState("");
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const esCliente = usuario?.rol === "cliente";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +33,40 @@ function DetallePropiedad() {
         setError("No se pudo cargar la propiedad.");
       });
   }, [id]);
+
+  useEffect(() => {
+    if (esCliente) {
+      api
+        .get("/favoritos")
+        .then((res) =>
+          setEsFavorito(res.data.some((f) => f.id === parseInt(id)))
+        )
+        .catch((err) => console.error(err));
+    }
+  }, [esCliente, id]);
+
+  const toggleFavorito = () => {
+    if (!usuario) {
+      navigate("/login");
+      return;
+    }
+    if (!esCliente) {
+      setMensaje("Solo clientes");
+      return;
+    }
+    const endpoint = `/favoritos/${id}`;
+    if (esFavorito) {
+      api
+        .delete(endpoint)
+        .then(() => setEsFavorito(false))
+        .catch(() => setMensaje("Error al eliminar favorito"));
+    } else {
+      api
+        .post(endpoint)
+        .then(() => setEsFavorito(true))
+        .catch(() => setMensaje("Error al agregar favorito"));
+    }
+  };
 
   if (error) return <Alert severity="error" sx={{ mt: 4 }}>{error}</Alert>;
 
@@ -62,7 +101,7 @@ function DetallePropiedad() {
             <strong>Precio:</strong> ${propiedad.precio}
           </Typography>
           <Typography>
-            <strong>Dirección:</strong> {propiedad.direccion}, {propiedad.ciudad},{" "}
+            <strong>Dirección:</strong> {propiedad.direccion}, {propiedad.ciudad}{" "}
             {propiedad.provincia}
           </Typography>
           <Typography>
@@ -82,7 +121,7 @@ function DetallePropiedad() {
             {new Date(propiedad.fecha_publicacion).toLocaleDateString()}
           </Typography>
 
-          <Box sx={{ mt: 3 }}>
+          <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
             <Button
               variant="contained"
               color="primary"
@@ -97,7 +136,19 @@ function DetallePropiedad() {
             >
               Contactar por esta propiedad
             </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={toggleFavorito}
+            >
+              {esFavorito ? "Quitar de Favoritos" : "Agregar a Favoritos"}
+            </Button>
           </Box>
+          {mensaje && (
+            <Alert severity="info" sx={{ mt: 2 }}>
+              {mensaje}
+            </Alert>
+          )}
         </CardContent>
       </Card>
     </Box>
@@ -105,5 +156,3 @@ function DetallePropiedad() {
 }
 
 export default DetallePropiedad;
-
-

@@ -12,7 +12,7 @@ const propiedadRoutes = require('./routes/propiedad.routes');
 const usuarioRoutes = require('./routes/usuario.routes');
 const mensajeRoutes = require('./routes/mensaje.routes');
 const healthRoutes = require('./routes/health.routes');
-
+const favoritoRoutes = require('./routes/favorito.routes');
 
 // Middlewares
 app.use(cors()); // Permite peticiones de distintos orígenes (frontend-backend)
@@ -23,6 +23,7 @@ app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/propiedades', propiedadRoutes);
 app.use('/api/mensajes', mensajeRoutes);
 app.use('/api/health', healthRoutes);
+app.use('/api/favoritos', favoritoRoutes);
 
 // Iniciamos el servidor
 app.listen(PORT, () => {
