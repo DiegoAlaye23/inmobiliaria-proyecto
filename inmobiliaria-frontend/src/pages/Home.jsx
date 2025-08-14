@@ -54,6 +54,7 @@ function Home() {
         gridTemplateColumns: { xs: '1fr', md: '260px 1fr 200px' },
         gap: 2,
         px: { xs: 2, sm: 4 },
+        mt: 2,
       }}
     >
       {/* Columna izquierda: filtros */}

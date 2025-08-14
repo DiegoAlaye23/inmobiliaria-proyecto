@@ -12,7 +12,7 @@ const types = ['Casa', 'Departamento', 'PH', 'Terreno'];
 
 function FiltersBar({ filters, setFilter }: any) {
   return (
-    <Toolbar disableGutters sx={{ gap: 2, flexWrap: 'wrap' }}>
+    <Toolbar disableGutters sx={{ mt: 2, gap: 2, flexWrap: 'wrap' }}>
       <FormControl size="small" sx={{ minWidth: 120 }}>
         <InputLabel id="city-label">Ciudad</InputLabel>
         <Select
