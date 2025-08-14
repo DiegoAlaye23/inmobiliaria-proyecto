@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import {
   Box,
@@ -9,10 +9,15 @@ import {
   CardActions,
   Button,
   Grid,
-  useMediaQuery
+  useMediaQuery,
+  IconButton,
+  Alert
 } from '@mui/material';
+import Favorite from '@mui/icons-material/Favorite';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import { useTheme } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import api from '../config/axios';
 import FiltersDrawer from '../components/FiltersDrawer';
 import FiltersTrigger from '../components/FiltersTrigger';
 import FiltersChips from '../components/FiltersChips';
@@ -23,10 +28,15 @@ function Home() {
   const [propiedades, setPropiedades] = useState([]);
   const { filters, debouncedFilters, setFilter, clearFilters } = usePropertyFilters();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [favoritos, setFavoritos] = useState([]);
+  const [mensaje, setMensaje] = useState('');
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const puedeFavoritos = ['cliente', 'usuario'].includes(usuario?.rol);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate();
 
-  const fetchPropiedades = () => {
+  const fetchPropiedades = useCallback(() => {
     const params = {};
     if (debouncedFilters.city) params.ciudad = debouncedFilters.city;
     if (debouncedFilters.type) params.tipo = debouncedFilters.type;
@@ -41,11 +51,43 @@ function Home() {
         setPropiedades(res.data);
       })
       .catch(err => console.error('Error al cargar propiedades:', err));
-  };
+  }, [debouncedFilters]);
 
   useEffect(() => {
     fetchPropiedades();
-  }, [debouncedFilters]);
+  }, [fetchPropiedades]);
+
+  useEffect(() => {
+    if (puedeFavoritos) {
+      api
+        .get('/favoritos')
+        .then(res => setFavoritos(res.data.map(f => f.id)))
+        .catch(err => console.error(err));
+    }
+  }, [puedeFavoritos]);
+
+  const toggleFavorito = (id) => {
+    if (!usuario) {
+      navigate('/login');
+      return;
+    }
+    if (!puedeFavoritos) {
+      setMensaje('Solo clientes');
+      return;
+    }
+    const endpoint = `/favoritos/${id}`;
+    if (favoritos.includes(id)) {
+      api
+        .delete(endpoint)
+        .then(() => setFavoritos(favoritos.filter(f => f !== id)))
+        .catch(() => setMensaje('Error al eliminar favorito'));
+    } else {
+      api
+        .post(endpoint)
+        .then(() => setFavoritos([...favoritos, id]))
+        .catch(() => setMensaje('Error al agregar favorito'));
+    }
+  };
 
   return (
     <Box
@@ -78,6 +120,12 @@ function Home() {
           setFilter={setFilter}
           clearFilters={clearFilters}
         />
+
+        {mensaje && (
+          <Alert severity="info" sx={{ mt: 2 }}>
+            {mensaje}
+          </Alert>
+        )}
 
         {Array.isArray(propiedades) && propiedades.length > 0 ? (
           <Grid container spacing={4} justifyContent="center" alignItems="stretch">
@@ -124,7 +172,10 @@ function Home() {
                       <strong>Ciudad:</strong> {prop.ciudad}
                     </Typography>
                   </CardContent>
-                  <CardActions>
+                  <CardActions sx={{ justifyContent: 'space-between' }}>
+                    <IconButton onClick={() => toggleFavorito(prop.id)} color="error">
+                      {favoritos.includes(prop.id) ? <Favorite /> : <FavoriteBorder />}
+                    </IconButton>
                     <Button
                       component={RouterLink}
                       to={`/propiedad/${prop.id}`}

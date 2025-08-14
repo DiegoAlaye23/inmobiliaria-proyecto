@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import DetallePropiedad from './pages/DetallePropiedad';
+import Favoritos from './pages/Favoritos';
 import AdminPanel from './pages/AdminPanel';
 import Contacto from './pages/Contacto';
 import NotFound from './pages/NotFound';
@@ -44,6 +45,8 @@ function App({ setModo, modo }) {
           <Route path="/propiedad/:id" element={<DetallePropiedad />} />
           {/* Página de contacto */}
           <Route path="/contacto" element={<Contacto />} />
+          {/* Favoritos del usuario */}
+          <Route path="/favoritos" element={<Favoritos />} />
           {/* Rutas protegidas solo para administradores */}
           <Route path="/admin" element={<RutaPrivadaAdmin><AdminPanel /></RutaPrivadaAdmin>} />
           <Route path="/admin/usuarios" element={<RutaPrivadaAdmin><UsuariosAdmin /></RutaPrivadaAdmin>} />
