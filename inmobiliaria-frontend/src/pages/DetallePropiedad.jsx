@@ -21,7 +21,7 @@ function DetallePropiedad() {
   const [esFavorito, setEsFavorito] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const usuario = JSON.parse(localStorage.getItem("usuario"));
-  const esCliente = usuario?.rol === "cliente";
+  const puedeFavoritos = ["cliente", "usuario"].includes(usuario?.rol);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function DetallePropiedad() {
   }, [id]);
 
   useEffect(() => {
-    if (esCliente) {
+    if (puedeFavoritos) {
       api
         .get("/favoritos")
         .then((res) =>
@@ -43,14 +43,14 @@ function DetallePropiedad() {
         )
         .catch((err) => console.error(err));
     }
-  }, [esCliente, id]);
+  }, [puedeFavoritos, id]);
 
   const toggleFavorito = () => {
     if (!usuario) {
       navigate("/login");
       return;
     }
-    if (!esCliente) {
+    if (!puedeFavoritos) {
       setMensaje("Solo clientes");
       return;
     }

@@ -1,5 +1,6 @@
 const soloCliente = (req, res, next) => {
-  if (!req.usuario || req.usuario.rol !== 'cliente') {
+  const rol = req.usuario?.rol;
+  if (!rol || (rol !== 'cliente' && rol !== 'usuario')) {
     return res.status(403).json({ error: 'Solo clientes' });
   }
   next();
