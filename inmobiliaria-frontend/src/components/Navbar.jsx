@@ -17,6 +17,7 @@ function Navbar({ setModo, modo }) {
   const navigate = useNavigate();
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const token = localStorage.getItem("token");
+  const puedeFavoritos = ["cliente", "usuario"].includes(usuario?.rol);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -103,6 +104,15 @@ function Navbar({ setModo, modo }) {
                   </MenuItem>
                 </>
               )}
+              {puedeFavoritos && (
+                <MenuItem
+                  component={Link}
+                  to="/favoritos"
+                  onClick={handleMenuClose}
+                >
+                  Favoritos
+                </MenuItem>
+              )}
               {token && (
                 <MenuItem
                   onClick={() => {
@@ -147,6 +157,12 @@ function Navbar({ setModo, modo }) {
                   Mensajes
                 </AppButton>
               </>
+            )}
+
+            {puedeFavoritos && (
+              <AppButton variant="text" color="inherit" component={Link} to="/favoritos">
+                Favoritos
+              </AppButton>
             )}
 
             {token && (
