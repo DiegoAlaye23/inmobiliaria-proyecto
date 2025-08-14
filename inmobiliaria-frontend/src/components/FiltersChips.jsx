@@ -6,21 +6,18 @@ import PropTypes from 'prop-types';
 function FiltersChips({ filters, setFilter, clearFilters }) {
   const chips = [];
   if (filters.city) chips.push({ key: 'city', label: `Ciudad: ${filters.city}` });
+  if (filters.minPrice !== '') chips.push({ key: 'minPrice', label: `Mín: $${filters.minPrice}` });
+  if (filters.maxPrice !== '')
+    chips.push({
+      key: 'maxPrice',
+      label: `Máx: ${filters.maxPrice === 200000 ? '$200000+' : '$' + filters.maxPrice}`
+    });
   if (filters.type) chips.push({ key: 'type', label: `Tipo: ${filters.type}` });
-  if (filters.price[0] || filters.price[1] !== 1000000)
-    chips.push({ key: 'price', label: `Precio: ${filters.price[0]} - ${filters.price[1]}` });
-  if (filters.rooms) chips.push({ key: 'rooms', label: `Ambientes: ${filters.rooms}` });
-  if (filters.neighborhood)
-    chips.push({ key: 'neighborhood', label: `Barrio: ${filters.neighborhood}` });
 
   return (
     <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
       {chips.map(chip => (
-        <Chip
-          key={chip.key}
-          label={chip.label}
-          onDelete={() => setFilter(chip.key, chip.key === 'price' ? [0, 1000000] : '')}
-        />
+        <Chip key={chip.key} label={chip.label} onDelete={() => setFilter(chip.key, '')} />
       ))}
       {chips.length ? <Button onClick={clearFilters}>Limpiar</Button> : null}
     </Box>
