@@ -8,7 +8,6 @@ import {
   CardContent,
   CardActions,
   Button,
-  Grid,
   useMediaQuery,
   IconButton,
   Alert,
@@ -94,7 +93,7 @@ function Home() {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '360px 2fr' },
+        gridTemplateColumns: { xs: '1fr', md: '360px 1fr' },
         gap: 2,
         px: { xs: 2, sm: 4 },
         mt: 2,
@@ -109,7 +108,6 @@ function Home() {
             top: '20vh',
             p: 3,
             width: '100%',
-            maxWidth: 320,
             borderRadius: 2,
           }}
         >
@@ -140,67 +138,73 @@ function Home() {
         )}
 
         {Array.isArray(propiedades) && propiedades.length > 0 ? (
-          <Grid container spacing={4} justifyContent="center" alignItems="stretch">
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+              gap: 4,
+              alignItems: 'stretch',
+            }}
+          >
             {propiedades.map((prop) => (
-              <Grid item key={prop.id} xs={12} sm={6} md={6} sx={{ display: 'flex' }}>
-                <Card
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flexGrow: 1,
-                    borderRadius: 2,
-                    boxShadow: 3,
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={prop.imagen_destacada}
-                    alt={prop.titulo}
-                    sx={{ objectFit: 'cover' }}
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography variant="h6" gutterBottom>
-                      {prop.titulo}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      paragraph
-                      sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: 'vertical',
-                      }}
-                    >
-                      {prop.descripcion}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Precio:</strong> ${prop.precio}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Ciudad:</strong> {prop.ciudad}
-                    </Typography>
-                  </CardContent>
-                  <CardActions sx={{ justifyContent: 'space-between' }}>
-                    <IconButton onClick={() => toggleFavorito(prop.id)} color="error">
-                      {favoritos.includes(prop.id) ? <Favorite /> : <FavoriteBorder />}
-                    </IconButton>
-                    <Button
-                      component={RouterLink}
-                      to={`/propiedad/${prop.id}`}
-                      size="small"
-                      variant="outlined"
-                    >
-                      Ver más
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
+              <Card
+                key={prop.id}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flexGrow: 1,
+                  borderRadius: 2,
+                  boxShadow: 3,
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={prop.imagen_destacada}
+                  alt={prop.titulo}
+                  sx={{ objectFit: 'cover' }}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6" gutterBottom>
+                    {prop.titulo}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    paragraph
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                    }}
+                  >
+                    {prop.descripcion}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Precio:</strong> ${prop.precio}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Ciudad:</strong> {prop.ciudad}
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'space-between' }}>
+                  <IconButton onClick={() => toggleFavorito(prop.id)} color="error">
+                    {favoritos.includes(prop.id) ? <Favorite /> : <FavoriteBorder />}
+                  </IconButton>
+                  <Button
+                    component={RouterLink}
+                    to={`/propiedad/${prop.id}`}
+                    size="small"
+                    variant="outlined"
+                  >
+                    Ver más
+                  </Button>
+                </CardActions>
+              </Card>
             ))}
-          </Grid>
+          </Box>
         ) : (
           <Typography textAlign="center">
             No hay propiedades disponibles.
