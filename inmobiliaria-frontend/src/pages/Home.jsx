@@ -106,8 +106,7 @@ function Home() {
           elevation={4}
           sx={{
             position: 'sticky',
-            top: '50%',
-            transform: 'translateY(-50%)',
+            top: '20vh',
             p: 3,
             width: '100%',
             maxWidth: 320,
@@ -119,9 +118,7 @@ function Home() {
             Limpiar
           </Button>
         </Paper>
-
       </Box>
-
       {/* Columna central: listado de propiedades */}
       <Box>
         <Typography variant="h4" component="h1" gutterBottom textAlign="center">
