@@ -119,6 +119,7 @@ function Home() {
             Limpiar
           </Button>
         </Paper>
+
       </Box>
 
       {/* Columna central: listado de propiedades */}
