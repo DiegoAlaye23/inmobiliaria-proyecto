@@ -93,7 +93,7 @@ function Home() {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '320px 1fr' },
+        gridTemplateColumns: { xs: '1fr', md: '320px 1fr 200px' },
         gap: 2,
         px: { xs: 2, sm: 4 },
         mt: 2,
@@ -105,7 +105,8 @@ function Home() {
           display: { xs: 'none', md: 'flex' },
           flexDirection: 'column',
           alignItems: 'center',
-          mt: { md: '20vh' },
+          position: 'sticky',
+          top: '20vh',
           width: '100%',
         }}
       >
