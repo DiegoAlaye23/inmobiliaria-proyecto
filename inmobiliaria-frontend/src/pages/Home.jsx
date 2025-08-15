@@ -93,14 +93,23 @@ function Home() {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '260px 1fr 200px' },
+        gridTemplateColumns: { xs: '1fr', md: '320px 1fr 200px' },
         gap: 2,
         px: { xs: 2, sm: 4 },
         mt: 2,
       }}
     >
       {/* Columna izquierda: filtros */}
-      <Box sx={{ display: { xs: 'none', md: 'block' }, alignSelf: 'start' }}>
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'flex' },
+          flexDirection: 'column',
+          alignItems: 'center',
+          position: 'sticky',
+          top: '20vh',
+          width: '100%',
+        }}
+      >
         <FiltersForm filters={filters} setFilter={setFilter} />
         <Button onClick={clearFilters} sx={{ mt: 2 }}>
           Limpiar
