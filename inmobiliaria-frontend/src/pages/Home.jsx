@@ -100,7 +100,16 @@ function Home() {
       }}
     >
       {/* Columna izquierda: filtros */}
-      <Box sx={{ display: { xs: 'none', md: 'block' }, alignSelf: 'start' }}>
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'flex' },
+          flexDirection: 'column',
+          alignItems: 'center',
+          position: 'sticky',
+          top: 16,
+          alignSelf: 'start',
+        }}
+      >
         <FiltersForm filters={filters} setFilter={setFilter} />
         <Button onClick={clearFilters} sx={{ mt: 2 }}>
           Limpiar
