@@ -11,7 +11,8 @@ import {
   Grid,
   useMediaQuery,
   IconButton,
-  Alert
+  Alert,
+  Paper,
 } from '@mui/material';
 import Favorite from '@mui/icons-material/Favorite';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
@@ -93,18 +94,30 @@ function Home() {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '260px 1fr 200px' },
+        gridTemplateColumns: { xs: '1fr', md: '360px 1fr' },
         gap: 2,
         px: { xs: 2, sm: 4 },
         mt: 2,
       }}
     >
       {/* Columna izquierda: filtros */}
-      <Box sx={{ display: { xs: 'none', md: 'block' }, alignSelf: 'start' }}>
-        <FiltersForm filters={filters} setFilter={setFilter} />
-        <Button onClick={clearFilters} sx={{ mt: 2 }}>
-          Limpiar
-        </Button>
+      <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+        <Paper
+          elevation={4}
+          sx={{
+            position: 'sticky',
+            top: '20vh',
+            p: 3,
+            width: '100%',
+            maxWidth: 320,
+            borderRadius: 2,
+          }}
+        >
+          <FiltersForm filters={filters} setFilter={setFilter} />
+          <Button fullWidth onClick={clearFilters} sx={{ mt: 2 }}>
+            Limpiar
+          </Button>
+        </Paper>
       </Box>
 
       {/* Columna central: listado de propiedades */}
@@ -130,7 +143,7 @@ function Home() {
         {Array.isArray(propiedades) && propiedades.length > 0 ? (
           <Grid container spacing={4} justifyContent="center" alignItems="stretch">
             {propiedades.map((prop) => (
-              <Grid item key={prop.id} xs={12} sm={6} md={4} sx={{ display: 'flex' }}>
+              <Grid item key={prop.id} xs={12} sm={6} md={6} sx={{ display: 'flex' }}>
                 <Card
                   sx={{
                     display: 'flex',
@@ -204,13 +217,6 @@ function Home() {
         />
       </Box>
 
-      {/* Columna derecha: complementos */}
-      <Box sx={{ display: { xs: 'none', md: 'block' }, alignSelf: 'start', p: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Complementos
-        </Typography>
-        <Typography variant="body2">Contenido adicional</Typography>
-      </Box>
     </Box>
   );
 }
