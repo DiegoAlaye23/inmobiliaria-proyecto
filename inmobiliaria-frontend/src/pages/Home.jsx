@@ -8,10 +8,10 @@ import {
   CardContent,
   CardActions,
   Button,
-  Grid,
   useMediaQuery,
   IconButton,
-  Alert
+  Alert,
+  Paper,
 } from '@mui/material';
 import Favorite from '@mui/icons-material/Favorite';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
@@ -93,18 +93,29 @@ function Home() {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '260px 1fr 200px' },
+        gridTemplateColumns: { xs: '1fr', md: '360px 1fr' },
         gap: 2,
         px: { xs: 2, sm: 4 },
         mt: 2,
       }}
     >
       {/* Columna izquierda: filtros */}
-      <Box sx={{ display: { xs: 'none', md: 'block' }, alignSelf: 'start' }}>
-        <FiltersForm filters={filters} setFilter={setFilter} />
-        <Button onClick={clearFilters} sx={{ mt: 2 }}>
-          Limpiar
-        </Button>
+      <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+        <Paper
+          elevation={4}
+          sx={{
+            position: 'sticky',
+            top: '20vh',
+            p: 3,
+            width: '100%',
+            borderRadius: 2,
+          }}
+        >
+          <FiltersForm filters={filters} setFilter={setFilter} />
+          <Button fullWidth onClick={clearFilters} sx={{ mt: 2 }}>
+            Limpiar
+          </Button>
+        </Paper>
       </Box>
 
       {/* Columna central: listado de propiedades */}
@@ -128,67 +139,73 @@ function Home() {
         )}
 
         {Array.isArray(propiedades) && propiedades.length > 0 ? (
-          <Grid container spacing={4} justifyContent="center" alignItems="stretch">
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+              gap: 4,
+              alignItems: 'stretch',
+            }}
+          >
             {propiedades.map((prop) => (
-              <Grid item key={prop.id} xs={12} sm={6} md={4} sx={{ display: 'flex' }}>
-                <Card
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flexGrow: 1,
-                    borderRadius: 2,
-                    boxShadow: 3,
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={prop.imagen_destacada}
-                    alt={prop.titulo}
-                    sx={{ objectFit: 'cover' }}
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography variant="h6" gutterBottom>
-                      {prop.titulo}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      paragraph
-                      sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: 'vertical',
-                      }}
-                    >
-                      {prop.descripcion}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Precio:</strong> ${prop.precio}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Ciudad:</strong> {prop.ciudad}
-                    </Typography>
-                  </CardContent>
-                  <CardActions sx={{ justifyContent: 'space-between' }}>
-                    <IconButton onClick={() => toggleFavorito(prop.id)} color="error">
-                      {favoritos.includes(prop.id) ? <Favorite /> : <FavoriteBorder />}
-                    </IconButton>
-                    <Button
-                      component={RouterLink}
-                      to={`/propiedad/${prop.id}`}
-                      size="small"
-                      variant="outlined"
-                    >
-                      Ver más
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
+              <Card
+                key={prop.id}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flexGrow: 1,
+                  borderRadius: 2,
+                  boxShadow: 3,
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={prop.imagen_destacada}
+                  alt={prop.titulo}
+                  sx={{ objectFit: 'cover' }}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6" gutterBottom>
+                    {prop.titulo}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    paragraph
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                    }}
+                  >
+                    {prop.descripcion}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Precio:</strong> ${prop.precio}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Ciudad:</strong> {prop.ciudad}
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'space-between' }}>
+                  <IconButton onClick={() => toggleFavorito(prop.id)} color="error">
+                    {favoritos.includes(prop.id) ? <Favorite /> : <FavoriteBorder />}
+                  </IconButton>
+                  <Button
+                    component={RouterLink}
+                    to={`/propiedad/${prop.id}`}
+                    size="small"
+                    variant="outlined"
+                  >
+                    Ver más
+                  </Button>
+                </CardActions>
+              </Card>
             ))}
-          </Grid>
+          </Box>
         ) : (
           <Typography textAlign="center">
             No hay propiedades disponibles.
@@ -204,13 +221,6 @@ function Home() {
         />
       </Box>
 
-      {/* Columna derecha: complementos */}
-      <Box sx={{ display: { xs: 'none', md: 'block' }, alignSelf: 'start', p: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Complementos
-        </Typography>
-        <Typography variant="body2">Contenido adicional</Typography>
-      </Box>
     </Box>
   );
 }
