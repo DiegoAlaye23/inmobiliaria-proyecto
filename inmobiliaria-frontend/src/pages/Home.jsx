@@ -93,7 +93,7 @@ function Home() {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '260px 1fr 200px' },
+        gridTemplateColumns: { xs: '1fr', md: '320px 1fr' },
         gap: 2,
         px: { xs: 2, sm: 4 },
         mt: 2,
@@ -105,9 +105,8 @@ function Home() {
           display: { xs: 'none', md: 'flex' },
           flexDirection: 'column',
           alignItems: 'center',
-          position: 'sticky',
-          top: 16,
-          alignSelf: 'start',
+          mt: { md: '20vh' },
+          width: '100%',
         }}
       >
         <FiltersForm filters={filters} setFilter={setFilter} />
