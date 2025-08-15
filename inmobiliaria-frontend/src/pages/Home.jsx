@@ -94,7 +94,7 @@ function Home() {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '360px 1fr 240px' },
+        gridTemplateColumns: { xs: '1fr', md: '360px 1fr' },
         gap: 2,
         px: { xs: 2, sm: 4 },
         mt: 2,
@@ -142,7 +142,7 @@ function Home() {
         {Array.isArray(propiedades) && propiedades.length > 0 ? (
           <Grid container spacing={4} justifyContent="center" alignItems="stretch">
             {propiedades.map((prop) => (
-              <Grid item key={prop.id} xs={12} sm={6} md={4} sx={{ display: 'flex' }}>
+              <Grid item key={prop.id} xs={12} sm={6} md={6} sx={{ display: 'flex' }}>
                 <Card
                   sx={{
                     display: 'flex',
@@ -216,13 +216,6 @@ function Home() {
         />
       </Box>
 
-      {/* Columna derecha: complementos */}
-      <Box sx={{ display: { xs: 'none', md: 'block' }, alignSelf: 'start', p: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Complementos
-        </Typography>
-        <Typography variant="body2">Contenido adicional</Typography>
-      </Box>
     </Box>
   );
 }
