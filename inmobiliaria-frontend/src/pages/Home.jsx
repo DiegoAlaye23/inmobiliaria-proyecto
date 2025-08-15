@@ -119,7 +119,6 @@ function Home() {
           </Button>
         </Paper>
       </Box>
-
       {/* Columna central: listado de propiedades */}
       <Box>
         <Typography variant="h4" component="h1" gutterBottom textAlign="center">
