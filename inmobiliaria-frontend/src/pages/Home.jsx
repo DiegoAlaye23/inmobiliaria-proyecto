@@ -93,7 +93,7 @@ function Home() {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '360px 1fr' },
+    gridTemplateColumns: { xs: '1fr', md: '360px 1fr' },
         gap: 2,
         px: { xs: 2, sm: 4 },
         mt: 2,
