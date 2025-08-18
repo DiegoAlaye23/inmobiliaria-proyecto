@@ -25,37 +25,39 @@ function App({ setModo, modo }) {
   return (
     // Envuelve toda la app en un enrutador para habilitar navegación por URLs
     <BrowserRouter>
-      {/* Barra de navegación, recibe props para cambiar el modo claro/oscuro */}
-      <Navbar setModo={setModo} modo={modo} />
-      <Toolbar />
-      {/* Contenido principal */}
-      <Box component="main" sx={{ pb: 8 }}>
-        {/* Define las rutas disponibles */}
-        <Routes>
-          {/* Ruta de inicio */}
-          <Route path="/" element={<Home />} />
-          {/* Autenticación */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<Register />} />
-          <Route path="/recuperar" element={<RecuperarPassword />} />
-          <Route path="/restablecer/:token" element={<RestablecerPassword />} />
-          {/* Verificación de cuenta por token */}
-          <Route path="/verificar/:token" element={<VerificarCuenta />} />
-          {/* Detalle de una propiedad específica */}
-          <Route path="/propiedad/:id" element={<DetallePropiedad />} />
-          {/* Página de contacto */}
-          <Route path="/contacto" element={<Contacto />} />
-          {/* Favoritos del usuario */}
-          <Route path="/favoritos" element={<Favoritos />} />
-          {/* Rutas protegidas solo para administradores */}
-          <Route path="/admin" element={<RutaPrivadaAdmin><AdminPanel /></RutaPrivadaAdmin>} />
-          <Route path="/admin/usuarios" element={<RutaPrivadaAdmin><UsuariosAdmin /></RutaPrivadaAdmin>} />
-          <Route path="/admin/mensajes" element={<RutaPrivadaAdmin><MensajesAdmin /></RutaPrivadaAdmin>} />
-          {/* Ruta para manejar páginas no encontradas */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+      <Box sx={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
+        {/* Barra de navegación, recibe props para cambiar el modo claro/oscuro */}
+        <Navbar setModo={setModo} modo={modo} />
+        <Toolbar />
+        {/* Contenido principal */}
+        <Box component="main" sx={{ flexGrow: 1 }}>
+          {/* Define las rutas disponibles */}
+          <Routes>
+            {/* Ruta de inicio */}
+            <Route path="/" element={<Home />} />
+            {/* Autenticación */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/registro" element={<Register />} />
+            <Route path="/recuperar" element={<RecuperarPassword />} />
+            <Route path="/restablecer/:token" element={<RestablecerPassword />} />
+            {/* Verificación de cuenta por token */}
+            <Route path="/verificar/:token" element={<VerificarCuenta />} />
+            {/* Detalle de una propiedad específica */}
+            <Route path="/propiedad/:id" element={<DetallePropiedad />} />
+            {/* Página de contacto */}
+            <Route path="/contacto" element={<Contacto />} />
+            {/* Favoritos del usuario */}
+            <Route path="/favoritos" element={<Favoritos />} />
+            {/* Rutas protegidas solo para administradores */}
+            <Route path="/admin" element={<RutaPrivadaAdmin><AdminPanel /></RutaPrivadaAdmin>} />
+            <Route path="/admin/usuarios" element={<RutaPrivadaAdmin><UsuariosAdmin /></RutaPrivadaAdmin>} />
+            <Route path="/admin/mensajes" element={<RutaPrivadaAdmin><MensajesAdmin /></RutaPrivadaAdmin>} />
+            {/* Ruta para manejar páginas no encontradas */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Box>
+        <Footer />
       </Box>
-      <Footer />
     </BrowserRouter>
   );
 }
