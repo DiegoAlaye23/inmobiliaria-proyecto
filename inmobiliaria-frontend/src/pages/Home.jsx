@@ -100,7 +100,13 @@ function Home() {
       }}
     >
       {/* Columna izquierda: filtros */}
-      <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'flex' },
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+        }}
+      >
         <Paper
           elevation={4}
           sx={{
