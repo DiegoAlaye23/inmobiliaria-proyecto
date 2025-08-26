@@ -41,7 +41,7 @@ Este proyecto es una aplicación web completa para la gestión de propiedades in
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/inmobiliaria-web.git](https://github.com/DiegoAlaye23/inmobiliaria-proyecto.git
+git clone https://github.com/DiegoAlaye23/inmobiliaria-proyecto.git
 cd inmobiliaria-web
 ```
 
