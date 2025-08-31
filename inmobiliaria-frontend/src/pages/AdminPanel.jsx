@@ -26,14 +26,18 @@ function AdminPanel() {
     descripcion: "",
     precio: "",
     ciudad: "",
+    direccion: "",
+    provincia: "",
+    tipo: "",
     ambientes: "",
     banos: "",
     cochera: "",
     m2: "",
-    imagen: null,
+    imagenes: null,
   });
   const [editandoId, setEditandoId] = useState(null);
   const [editData, setEditData] = useState({});
+  const [dragIndex, setDragIndex] = useState(null);
   const token = localStorage.getItem("token");
 
   const [nuevoAdmin, setNuevoAdmin] = useState({
@@ -63,16 +67,18 @@ function AdminPanel() {
     e.preventDefault();
     const formData = new FormData();
     Object.entries(nueva).forEach(([key, val]) => {
-      if (val !== null && val !== undefined && val !== "") {
+      if (key !== "imagenes" && val !== null && val !== undefined && val !== "") {
         formData.append(key, val);
       }
     });
+    if (nueva.imagenes) {
+      Array.from(nueva.imagenes).forEach((img) => formData.append("imagenes", img));
+    }
 
     axios
       .post("https://inmobiliaria-proyecto.onrender.com/api/propiedades", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
         },
       })
       .then(() => {
@@ -82,19 +88,26 @@ function AdminPanel() {
           descripcion: "",
           precio: "",
           ciudad: "",
+          direccion: "",
+          provincia: "",
+          tipo: "",
           ambientes: "",
           banos: "",
           cochera: "",
           m2: "",
-          imagen: null,
+          imagenes: null,
         });
       })
       .catch(() => alert("Error al crear propiedad"));
   };
 
   const handleEditClick = (prop) => {
-    setEditandoId(prop.id);
-    setEditData({ ...prop });
+    axios
+      .get(`https://inmobiliaria-proyecto.onrender.com/api/propiedades/${prop.id}`)
+      .then((res) => {
+        setEditandoId(prop.id);
+        setEditData(res.data);
+      });
   };
 
   const handleEditChange = (e) => {
@@ -106,15 +119,73 @@ function AdminPanel() {
   };
 
   const handleSaveEdit = (id) => {
+    const formData = new FormData();
+    Object.entries(editData).forEach(([key, val]) => {
+      if (
+        key !== "imagenes" &&
+        key !== "nuevasImagenes" &&
+        val !== null &&
+        val !== undefined &&
+        val !== ""
+      ) {
+        formData.append(key, val);
+      }
+    });
+    if (editData.nuevasImagenes) {
+      Array.from(editData.nuevasImagenes).forEach((img) =>
+        formData.append("imagenes", img)
+      );
+    }
     axios
-      .put(`https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`, editData, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .put(
+        `https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then(() => {
         setEditandoId(null);
         cargarPropiedades();
       })
       .catch(() => alert("Error al actualizar"));
+  };
+
+  const handleDragStart = (index) => {
+    setDragIndex(index);
+  };
+
+  const handleDrop = (index) => {
+    if (dragIndex === null) return;
+    const items = Array.from(editData.imagenes || []);
+    const [moved] = items.splice(dragIndex, 1);
+    items.splice(index, 0, moved);
+    setDragIndex(null);
+    setEditData((prev) => ({ ...prev, imagenes: items }));
+    axios
+      .put(
+        `https://inmobiliaria-proyecto.onrender.com/api/propiedades/${editandoId}/imagenes/orden`,
+        { orden: items.map((i) => i.id) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .catch(() => alert("Error al reordenar"));
+  };
+
+  const handleImageDelete = (imgId) => {
+    axios
+      .delete(
+        `https://inmobiliaria-proyecto.onrender.com/api/propiedades/${editandoId}/imagenes/${imgId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(() => {
+        setEditData((prev) => ({
+          ...prev,
+          imagenes: prev.imagenes.filter((i) => i.id !== imgId),
+        }));
+      })
+      .catch(() => alert("Error al eliminar imagen"));
   };
 
   const handleCancelEdit = () => {
@@ -176,6 +247,40 @@ function AdminPanel() {
                 required
                 value={nueva.ciudad}
                 onChange={(e) => setNueva({ ...nueva, ciudad: e.target.value })}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Dirección"
+                name="direccion"
+                fullWidth
+                required
+                value={nueva.direccion}
+                onChange={(e) =>
+                  setNueva({ ...nueva, direccion: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Provincia"
+                name="provincia"
+                fullWidth
+                required
+                value={nueva.provincia}
+                onChange={(e) =>
+                  setNueva({ ...nueva, provincia: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Tipo"
+                name="tipo"
+                fullWidth
+                required
+                value={nueva.tipo}
+                onChange={(e) => setNueva({ ...nueva, tipo: e.target.value })}
               />
             </Grid>
             <Grid item xs={12}>
@@ -256,13 +361,15 @@ function AdminPanel() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
-                <InputLabel shrink htmlFor="imagen"></InputLabel>
+                <InputLabel shrink htmlFor="imagenes"></InputLabel>
                 <input
                   type="file"
                   accept="image/*"
-                  id="imagen"
+                  id="imagenes"
+                  name="imagenes"
+                  multiple
                   onChange={(e) =>
-                    setNueva({ ...nueva, imagen: e.target.files[0] })
+                    setNueva({ ...nueva, imagenes: e.target.files })
                   }
                 />
               </FormControl>
@@ -385,6 +492,30 @@ function AdminPanel() {
                       />
                       <TextField
                         fullWidth
+                        name="direccion"
+                        label="Dirección"
+                        value={editData.direccion}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      <TextField
+                        fullWidth
+                        name="provincia"
+                        label="Provincia"
+                        value={editData.provincia}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      <TextField
+                        fullWidth
+                        name="tipo"
+                        label="Tipo"
+                        value={editData.tipo}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      <TextField
+                        fullWidth
                         name="ambientes"
                         label="Ambientes"
                         value={editData.ambientes}
@@ -418,6 +549,49 @@ function AdminPanel() {
                         value={editData.m2}
                         onChange={handleEditChange}
                         sx={{ mb: 1 }}
+                      />
+                      {editData.imagenes && (
+                        <Box
+                          display="flex"
+                          gap={1}
+                          flexWrap="wrap"
+                          sx={{ mb: 1 }}
+                        >
+                          {editData.imagenes.map((img, idx) => (
+                            <Box
+                              key={img.id}
+                              draggable
+                              onDragStart={() => handleDragStart(idx)}
+                              onDragOver={(e) => e.preventDefault()}
+                              onDrop={() => handleDrop(idx)}
+                              sx={{ position: "relative" }}
+                            >
+                              <img
+                                src={img.url}
+                                alt={img.alt}
+                                width={80}
+                                height={80}
+                              />
+                              <IconButton
+                                size="small"
+                                onClick={() => handleImageDelete(img.id)}
+                                sx={{ position: "absolute", top: 0, right: 0 }}
+                              >
+                                <Delete fontSize="small" />
+                              </IconButton>
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        name="imagenes"
+                        multiple
+                        onChange={(e) =>
+                          setEditData({ ...editData, nuevasImagenes: e.target.files })
+                        }
+                        style={{ marginBottom: 8 }}
                       />
                       <Box display="flex" gap={1}>
                         <IconButton
