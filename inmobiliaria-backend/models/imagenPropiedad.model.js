@@ -13,7 +13,25 @@ const obtenerImagenesPorPropiedad = (propertyId, callback) => {
   db.query(sql, [propertyId], callback);
 };
 
+// Delete an image by its ID
+const eliminarImagen = (id, callback) => {
+  const sql = 'DELETE FROM property_images WHERE id = $1';
+  db.query(sql, [id], callback);
+};
+
+// Update order of images for a property given an array of image IDs
+const actualizarOrdenImagenes = (propertyId, ids, callback) => {
+  const queries = ids.map((imgId, index) =>
+    db.query('UPDATE property_images SET "order" = $1 WHERE id = $2 AND property_id = $3', [index, imgId, propertyId])
+  );
+  Promise.all(queries)
+    .then(() => callback(null))
+    .catch((err) => callback(err));
+};
+
 module.exports = {
   agregarImagen,
   obtenerImagenesPorPropiedad,
+  eliminarImagen,
+  actualizarOrdenImagenes,
 };

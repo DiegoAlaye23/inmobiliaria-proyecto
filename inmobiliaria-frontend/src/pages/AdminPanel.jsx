@@ -34,6 +34,7 @@ function AdminPanel() {
   });
   const [editandoId, setEditandoId] = useState(null);
   const [editData, setEditData] = useState({});
+  const [dragIndex, setDragIndex] = useState(null);
   const token = localStorage.getItem("token");
 
   const [nuevoAdmin, setNuevoAdmin] = useState({
@@ -96,8 +97,12 @@ function AdminPanel() {
   };
 
   const handleEditClick = (prop) => {
-    setEditandoId(prop.id);
-    setEditData({ ...prop });
+    axios
+      .get(`https://inmobiliaria-proyecto.onrender.com/api/propiedades/${prop.id}`)
+      .then((res) => {
+        setEditandoId(prop.id);
+        setEditData(res.data);
+      });
   };
 
   const handleEditChange = (e) => {
@@ -109,15 +114,74 @@ function AdminPanel() {
   };
 
   const handleSaveEdit = (id) => {
+    const formData = new FormData();
+    Object.entries(editData).forEach(([key, val]) => {
+      if (
+        key !== "imagenes" &&
+        key !== "nuevasImagenes" &&
+        val !== null &&
+        val !== undefined &&
+        val !== ""
+      ) {
+        formData.append(key, val);
+      }
+    });
+    if (editData.nuevasImagenes) {
+      Array.from(editData.nuevasImagenes).forEach((img) =>
+        formData.append("imagenes", img)
+      );
+    }
     axios
-      .put(`https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`, editData, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .put(
+        `https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then(() => {
         setEditandoId(null);
         cargarPropiedades();
       })
       .catch(() => alert("Error al actualizar"));
+  };
+
+  const handleDragStart = (index) => {
+    setDragIndex(index);
+  };
+
+  const handleDrop = (index) => {
+    if (dragIndex === null) return;
+    const items = Array.from(editData.imagenes || []);
+    const [moved] = items.splice(dragIndex, 1);
+    items.splice(index, 0, moved);
+    setDragIndex(null);
+    setEditData((prev) => ({ ...prev, imagenes: items }));
+    axios
+      .put(
+        `https://inmobiliaria-proyecto.onrender.com/api/propiedades/${editandoId}/imagenes/orden`,
+        { orden: items.map((i) => i.id) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .catch(() => alert("Error al reordenar"));
+  };
+
+  const handleImageDelete = (imgId) => {
+    axios
+      .delete(
+        `https://inmobiliaria-proyecto.onrender.com/api/propiedades/${editandoId}/imagenes/${imgId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(() => {
+        setEditData((prev) => ({
+          ...prev,
+          imagenes: prev.imagenes.filter((i) => i.id !== imgId),
+        }));
+      })
+      .catch(() => alert("Error al eliminar imagen"));
   };
 
   const handleCancelEdit = () => {
@@ -421,6 +485,47 @@ function AdminPanel() {
                         label="Metros cuadrados"
                         value={editData.m2}
                         onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      {editData.imagenes && (
+                        <Box
+                          display="flex"
+                          gap={1}
+                          flexWrap="wrap"
+                          sx={{ mb: 1 }}
+                        >
+                          {editData.imagenes.map((img, idx) => (
+                            <Box
+                              key={img.id}
+                              draggable
+                              onDragStart={() => handleDragStart(idx)}
+                              onDragOver={(e) => e.preventDefault()}
+                              onDrop={() => handleDrop(idx)}
+                              sx={{ position: "relative" }}
+                            >
+                              <img
+                                src={img.url}
+                                alt={img.alt}
+                                width={80}
+                                height={80}
+                              />
+                              <IconButton
+                                size="small"
+                                onClick={() => handleImageDelete(img.id)}
+                                sx={{ position: "absolute", top: 0, right: 0 }}
+                              >
+                                <Delete fontSize="small" />
+                              </IconButton>
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
+                      <TextField
+                        type="file"
+                        inputProps={{ multiple: true }}
+                        onChange={(e) =>
+                          setEditData({ ...editData, nuevasImagenes: e.target.files })
+                        }
                         sx={{ mb: 1 }}
                       />
                       <Box display="flex" gap={1}>

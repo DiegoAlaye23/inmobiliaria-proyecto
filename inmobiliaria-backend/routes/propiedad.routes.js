@@ -19,6 +19,8 @@ router.get('/:id', controlador.obtenerPropiedadPorId);
 router.post('/', verifyToken, soloAdmin, upload.array('imagenes'), controlador.crearPropiedad);
 router.put('/:id', verifyToken, soloAdmin, upload.array('imagenes'), controlador.actualizarPropiedad);
 router.delete('/:id', verifyToken, soloAdmin, controlador.eliminarPropiedad);
+router.delete('/:id/imagenes/:imageId', verifyToken, soloAdmin, controlador.eliminarImagen);
+router.put('/:id/imagenes/orden', verifyToken, soloAdmin, controlador.actualizarOrdenImagenes);
 
 module.exports = router;
 

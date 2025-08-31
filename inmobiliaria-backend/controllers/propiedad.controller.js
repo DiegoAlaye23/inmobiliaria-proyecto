@@ -207,6 +207,37 @@ const eliminarPropiedad = (req, res) => {
   });
 };
 
+// DELETE /api/propiedades/:id/imagenes/:imageId
+// Remove an image from a property
+const eliminarImagen = (req, res) => {
+  const imageId = req.params.imageId;
+  ImagenPropiedad.eliminarImagen(imageId, (err, resultado) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al eliminar la imagen' });
+    } else if (resultado.rowCount === 0) {
+      res.status(404).json({ mensaje: 'Imagen no encontrada' });
+    } else {
+      res.json({ mensaje: 'Imagen eliminada correctamente' });
+    }
+  });
+};
+
+// PUT /api/propiedades/:id/imagenes/orden
+// Update order of property images
+const actualizarOrdenImagenes = (req, res) => {
+  const id = req.params.id;
+  const orden = req.body.orden || [];
+  ImagenPropiedad.actualizarOrdenImagenes(id, orden, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al actualizar el orden de imágenes' });
+    } else {
+      res.json({ mensaje: 'Orden de imágenes actualizado correctamente' });
+    }
+  });
+};
+
 // Exportar todos los métodos del controlador
 module.exports = {
   obtenerPropiedades,
@@ -214,6 +245,8 @@ module.exports = {
   crearPropiedad,
   actualizarPropiedad,
   eliminarPropiedad,
+  eliminarImagen,
+  actualizarOrdenImagenes,
 };
 
 
