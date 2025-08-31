@@ -44,9 +44,10 @@ const obtenerPropiedadPorId = (req, res) => {
       ImagenPropiedad.obtenerImagenesPorPropiedad(id, (imgErr, imgRes) => {
         if (imgErr) {
           console.error(imgErr);
-          return res.status(500).json({ error: "Error al obtener imágenes" });
+          propiedad.imagenes = [];
+        } else {
+          propiedad.imagenes = imgRes.rows;
         }
-        propiedad.imagenes = imgRes.rows;
         res.json(propiedad);
       });
     }

@@ -328,6 +328,7 @@ function AdminPanel() {
                   type="file"
                   accept="image/*"
                   id="imagenes"
+                  name="imagenes"
                   multiple
                   onChange={(e) =>
                     setNueva({ ...nueva, imagenes: e.target.files })
@@ -520,13 +521,15 @@ function AdminPanel() {
                           ))}
                         </Box>
                       )}
-                      <TextField
+                      <input
                         type="file"
-                        inputProps={{ multiple: true }}
+                        accept="image/*"
+                        name="imagenes"
+                        multiple
                         onChange={(e) =>
                           setEditData({ ...editData, nuevasImagenes: e.target.files })
                         }
-                        sx={{ mb: 1 }}
+                        style={{ marginBottom: 8 }}
                       />
                       <Box display="flex" gap={1}>
                         <IconButton
