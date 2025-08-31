@@ -30,7 +30,7 @@ function AdminPanel() {
     banos: "",
     cochera: "",
     m2: "",
-    imagen: null,
+    imagenes: null,
   });
   const [editandoId, setEditandoId] = useState(null);
   const [editData, setEditData] = useState({});
@@ -63,10 +63,13 @@ function AdminPanel() {
     e.preventDefault();
     const formData = new FormData();
     Object.entries(nueva).forEach(([key, val]) => {
-      if (val !== null && val !== undefined && val !== "") {
+      if (key !== "imagenes" && val !== null && val !== undefined && val !== "") {
         formData.append(key, val);
       }
     });
+    if (nueva.imagenes) {
+      Array.from(nueva.imagenes).forEach((img) => formData.append("imagenes", img));
+    }
 
     axios
       .post("https://inmobiliaria-proyecto.onrender.com/api/propiedades", formData, {
@@ -86,7 +89,7 @@ function AdminPanel() {
           banos: "",
           cochera: "",
           m2: "",
-          imagen: null,
+          imagenes: null,
         });
       })
       .catch(() => alert("Error al crear propiedad"));
@@ -256,13 +259,14 @@ function AdminPanel() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
-                <InputLabel shrink htmlFor="imagen"></InputLabel>
+                <InputLabel shrink htmlFor="imagenes"></InputLabel>
                 <input
                   type="file"
                   accept="image/*"
-                  id="imagen"
+                  id="imagenes"
+                  multiple
                   onChange={(e) =>
-                    setNueva({ ...nueva, imagen: e.target.files[0] })
+                    setNueva({ ...nueva, imagenes: e.target.files })
                   }
                 />
               </FormControl>
