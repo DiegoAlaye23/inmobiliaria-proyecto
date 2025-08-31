@@ -16,9 +16,11 @@ router.get('/', controlador.obtenerPropiedades);
 router.get('/:id', controlador.obtenerPropiedadPorId);
 
 // Rutas protegidas (token + admin)
-router.post('/', verifyToken, soloAdmin, upload.single('imagen'), controlador.crearPropiedad);
-router.put('/:id', verifyToken, soloAdmin, upload.single('imagen'), controlador.actualizarPropiedad);
+router.post('/', verifyToken, soloAdmin, upload.array('imagenes'), controlador.crearPropiedad);
+router.put('/:id', verifyToken, soloAdmin, upload.array('imagenes'), controlador.actualizarPropiedad);
 router.delete('/:id', verifyToken, soloAdmin, controlador.eliminarPropiedad);
+router.delete('/:id/imagenes/:imageId', verifyToken, soloAdmin, controlador.eliminarImagen);
+router.put('/:id/imagenes/orden', verifyToken, soloAdmin, controlador.actualizarOrdenImagenes);
 
 module.exports = router;
 
