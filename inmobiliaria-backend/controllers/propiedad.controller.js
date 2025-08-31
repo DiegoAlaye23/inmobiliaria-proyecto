@@ -2,6 +2,7 @@
 const Propiedad = require("../models/propiedad.model");
 const path = require("path");
 const supabase = require("../config/supabase");
+const ImagenPropiedad = require("../models/imagenPropiedad.model");
 
 // GET /api/propiedades
 // Obtener todas las propiedades con filtros opcionales
@@ -39,8 +40,15 @@ const obtenerPropiedadPorId = (req, res) => {
     } else if (resultados.rows.length === 0) {
       res.status(404).json({ mensaje: "Propiedad no encontrada" });
     } else {
-      // `rows` contiene las propiedades obtenidas; devolvemos la primera.
-      res.json(resultados.rows[0]);
+      const propiedad = resultados.rows[0];
+      ImagenPropiedad.obtenerImagenesPorPropiedad(id, (imgErr, imgRes) => {
+        if (imgErr) {
+          console.error(imgErr);
+          return res.status(500).json({ error: "Error al obtener imágenes" });
+        }
+        propiedad.imagenes = imgRes.rows;
+        res.json(propiedad);
+      });
     }
   });
 };
@@ -50,37 +58,59 @@ const obtenerPropiedadPorId = (req, res) => {
 const crearPropiedad = async (req, res) => {
   // req.body contiene los datos del formulario.
   const nuevaPropiedad = req.body;
+  const archivos = req.files || [];
+  const urls = [];
 
-  // Si llega una imagen, se sube a Supabase Storage y se guarda la URL pública.
-  if (req.file) {
-    const extension = path.extname(req.file.originalname);
-    const nombreArchivo = `${Date.now()}${extension}`;
+  for (const file of archivos) {
+    const extension = path.extname(file.originalname);
+    const nombreArchivo = `${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2)}${extension}`;
 
     const { error } = await supabase.storage
       .from("uploads")
-      .upload(nombreArchivo, req.file.buffer, {
-        contentType: req.file.mimetype,
-      });
+      .upload(nombreArchivo, file.buffer, { contentType: file.mimetype });
 
     if (error) {
       console.error(error);
-      return res.status(500).json({ error: "No se pudo subir la imagen" });
+    } else {
+      const { data } = supabase.storage
+        .from("uploads")
+        .getPublicUrl(nombreArchivo);
+      urls.push(data.publicUrl);
     }
-
-    const { data } = supabase.storage.from("uploads").getPublicUrl(nombreArchivo);
-    nuevaPropiedad.imagen_destacada = data.publicUrl;
   }
 
-  // Llama al modelo para guardar la nueva propiedad.
-  Propiedad.crearPropiedad(nuevaPropiedad, (err, resultado) => {
+  if (urls.length > 0) {
+    nuevaPropiedad.imagen_destacada = urls[0];
+  }
+
+  Propiedad.crearPropiedad(nuevaPropiedad, async (err, resultado) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "No se pudo crear la propiedad" });
     } else {
+      const propiedadId = resultado.rows[0].id;
+      await Promise.all(
+        urls.map((url, index) =>
+          new Promise((resolve, reject) => {
+            ImagenPropiedad.agregarImagen(
+              propiedadId,
+              url,
+              nuevaPropiedad.titulo || "",
+              index,
+              (imgErr) => {
+                if (imgErr) reject(imgErr);
+                else resolve();
+              }
+            );
+          })
+        )
+      ).catch((e) => console.error(e));
+
       res.status(201).json({
         mensaje: "Propiedad creada correctamente",
-        //Si se guarda bien, devuelve el ID del nuevo registro.
-        id: resultado.insertId,
+        id: propiedadId,
       });
     }
   });
@@ -93,25 +123,59 @@ const actualizarPropiedad = async (req, res) => {
   const id = req.params.id;
   // Recibe datos nuevos desde el frontend (req.body)
   const datosActualizados = req.body;
+  const archivos = req.files || [];
+  const urls = [];
 
-  // Si el usuario envía una nueva imagen, la sube y reemplaza la existente.
-  if (req.file) {
-    const extension = path.extname(req.file.originalname);
-    const nombreArchivo = `${Date.now()}${extension}`;
+  for (const file of archivos) {
+    const extension = path.extname(file.originalname);
+    const nombreArchivo = `${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2)}${extension}`;
 
     const { error } = await supabase.storage
       .from("uploads")
-      .upload(nombreArchivo, req.file.buffer, {
-        contentType: req.file.mimetype,
-      });
+      .upload(nombreArchivo, file.buffer, { contentType: file.mimetype });
 
     if (error) {
       console.error(error);
-      return res.status(500).json({ error: "No se pudo subir la imagen" });
+    } else {
+      const { data } = supabase.storage
+        .from("uploads")
+        .getPublicUrl(nombreArchivo);
+      urls.push(data.publicUrl);
     }
+  }
 
-    const { data } = supabase.storage.from("uploads").getPublicUrl(nombreArchivo);
-    datosActualizados.imagen_destacada = data.publicUrl;
+  if (urls.length > 0) {
+    datosActualizados.imagen_destacada = urls[0];
+    let offset = 0;
+    try {
+      const existentes = await new Promise((resolve, reject) => {
+        ImagenPropiedad.obtenerImagenesPorPropiedad(id, (err, res) => {
+          if (err) reject(err);
+          else resolve(res.rows.length);
+        });
+      });
+      offset = existentes;
+    } catch (e) {
+      console.error(e);
+    }
+    await Promise.all(
+      urls.map((url, index) =>
+        new Promise((resolve, reject) => {
+          ImagenPropiedad.agregarImagen(
+            id,
+            url,
+            datosActualizados.titulo || "",
+            offset + index,
+            (imgErr) => {
+              if (imgErr) reject(imgErr);
+              else resolve();
+            }
+          );
+        })
+      )
+    ).catch((e) => console.error(e));
   }
 
   Propiedad.actualizarPropiedad(id, datosActualizados, (err, resultado) => {
@@ -143,6 +207,37 @@ const eliminarPropiedad = (req, res) => {
   });
 };
 
+// DELETE /api/propiedades/:id/imagenes/:imageId
+// Remove an image from a property
+const eliminarImagen = (req, res) => {
+  const imageId = req.params.imageId;
+  ImagenPropiedad.eliminarImagen(imageId, (err, resultado) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al eliminar la imagen' });
+    } else if (resultado.rowCount === 0) {
+      res.status(404).json({ mensaje: 'Imagen no encontrada' });
+    } else {
+      res.json({ mensaje: 'Imagen eliminada correctamente' });
+    }
+  });
+};
+
+// PUT /api/propiedades/:id/imagenes/orden
+// Update order of property images
+const actualizarOrdenImagenes = (req, res) => {
+  const id = req.params.id;
+  const orden = req.body.orden || [];
+  ImagenPropiedad.actualizarOrdenImagenes(id, orden, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al actualizar el orden de imágenes' });
+    } else {
+      res.json({ mensaje: 'Orden de imágenes actualizado correctamente' });
+    }
+  });
+};
+
 // Exportar todos los métodos del controlador
 module.exports = {
   obtenerPropiedades,
@@ -150,6 +245,8 @@ module.exports = {
   crearPropiedad,
   actualizarPropiedad,
   eliminarPropiedad,
+  eliminarImagen,
+  actualizarOrdenImagenes,
 };
 
 
