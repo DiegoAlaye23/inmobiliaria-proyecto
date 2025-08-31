@@ -12,6 +12,7 @@ import {
   CircularProgress,
   Alert,
   Divider,
+  Dialog,
 } from "@mui/material";
 
 function DetallePropiedad() {
@@ -20,6 +21,8 @@ function DetallePropiedad() {
   const [error, setError] = useState("");
   const [esFavorito, setEsFavorito] = useState(false);
   const [mensaje, setMensaje] = useState("");
+  const [indiceImagen, setIndiceImagen] = useState(0);
+  const [lightboxAbierto, setLightboxAbierto] = useState(false);
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const puedeFavoritos = ["cliente", "usuario"].includes(usuario?.rol);
   const navigate = useNavigate();
@@ -77,15 +80,49 @@ function DetallePropiedad() {
       </Box>
     );
 
+  const imagenes =
+    propiedad.imagenes && propiedad.imagenes.length > 0
+      ? propiedad.imagenes
+      : [{ url: propiedad.imagen_destacada, alt: propiedad.titulo }];
+
   return (
     <Box sx={{ p: 4, maxWidth: 900, mx: "auto" }}>
       <Card sx={{ borderRadius: 2, boxShadow: 4 }}>
-        <CardMedia
-          component="img"
-          height="400"
-          image={propiedad.imagen_destacada}
-          alt={propiedad.titulo}
-        />
+        <Box>
+          <Box
+            sx={{ cursor: "pointer" }}
+            onClick={() => setLightboxAbierto(true)}
+          >
+            <img
+              src={imagenes[indiceImagen].url}
+              alt={imagenes[indiceImagen].alt}
+              style={{ width: "100%", height: 400, objectFit: "cover" }}
+            />
+          </Box>
+          <Box sx={{ display: "flex", mt: 1, gap: 1, overflowX: "auto" }}>
+            {imagenes.map((img, idx) => (
+              <Box
+                key={idx}
+                onClick={() => setIndiceImagen(idx)}
+                sx={{
+                  width: 80,
+                  height: 80,
+                  border:
+                    idx === indiceImagen
+                      ? "2px solid #1976d2"
+                      : "1px solid #ccc",
+                  cursor: "pointer",
+                }}
+              >
+                <img
+                  src={img.url}
+                  alt={img.alt}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </Box>
+            ))}
+          </Box>
+        </Box>
 
         <CardContent>
           <Typography variant="h4" gutterBottom>
@@ -144,13 +181,24 @@ function DetallePropiedad() {
               {esFavorito ? "Quitar de Favoritos" : "Agregar a Favoritos"}
             </Button>
           </Box>
-          {mensaje && (
-            <Alert severity="info" sx={{ mt: 2 }}>
-              {mensaje}
-            </Alert>
-          )}
+        {mensaje && (
+          <Alert severity="info" sx={{ mt: 2 }}>
+            {mensaje}
+          </Alert>
+        )}
         </CardContent>
       </Card>
+      <Dialog
+        open={lightboxAbierto}
+        onClose={() => setLightboxAbierto(false)}
+        maxWidth="lg"
+      >
+        <img
+          src={imagenes[indiceImagen].url}
+          alt={imagenes[indiceImagen].alt}
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        />
+      </Dialog>
     </Box>
   );
 }
