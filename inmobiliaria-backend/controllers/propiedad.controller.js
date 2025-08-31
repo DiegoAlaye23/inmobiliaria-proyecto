@@ -104,26 +104,33 @@ const crearPropiedad = async (req, res) => {
     } else {
       const propiedadId = resultado.rows[0].id;
       try {
+        const fallos = [];
         for (const [index, url] of urls.entries()) {
-          await new Promise((resolve, reject) => {
-            ImagenPropiedad.agregarImagen(
-              propiedadId,
-              url,
-              nuevaPropiedad.titulo || "",
-              index,
-              (imgErr) => (imgErr ? reject(imgErr) : resolve())
-            );
-          });
+          try {
+            await new Promise((resolve, reject) => {
+              ImagenPropiedad.agregarImagen(
+                propiedadId,
+                url,
+                nuevaPropiedad.titulo || "",
+                index,
+                (imgErr) => (imgErr ? reject(imgErr) : resolve())
+              );
+            });
+          } catch (imgErr) {
+            console.error(imgErr);
+            fallos.push(url);
+          }
         }
         res.status(201).json({
-          mensaje: "Propiedad creada correctamente",
+          mensaje:
+            fallos.length > 0
+              ? "Propiedad creada pero algunas imágenes no se guardaron"
+              : "Propiedad creada correctamente",
           id: propiedadId,
         });
       } catch (imgErr) {
         console.error(imgErr);
-        res
-          .status(500)
-          .json({ error: "Propiedad creada pero fallo al guardar imágenes" });
+        res.status(500).json({ error: "No se pudo crear la propiedad" });
       }
     }
   });
