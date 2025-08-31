@@ -76,7 +76,6 @@ function AdminPanel() {
       .post("https://inmobiliaria-proyecto.onrender.com/api/propiedades", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
         },
       })
       .then(() => {
@@ -138,7 +137,6 @@ function AdminPanel() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
           },
         }
       )

@@ -92,27 +92,28 @@ const crearPropiedad = async (req, res) => {
       res.status(500).json({ error: "No se pudo crear la propiedad" });
     } else {
       const propiedadId = resultado.rows[0].id;
-      await Promise.all(
-        urls.map((url, index) =>
-          new Promise((resolve, reject) => {
+      try {
+        for (const [index, url] of urls.entries()) {
+          await new Promise((resolve, reject) => {
             ImagenPropiedad.agregarImagen(
               propiedadId,
               url,
               nuevaPropiedad.titulo || "",
               index,
-              (imgErr) => {
-                if (imgErr) reject(imgErr);
-                else resolve();
-              }
+              (imgErr) => (imgErr ? reject(imgErr) : resolve())
             );
-          })
-        )
-      ).catch((e) => console.error(e));
-
-      res.status(201).json({
-        mensaje: "Propiedad creada correctamente",
-        id: propiedadId,
-      });
+          });
+        }
+        res.status(201).json({
+          mensaje: "Propiedad creada correctamente",
+          id: propiedadId,
+        });
+      } catch (imgErr) {
+        console.error(imgErr);
+        res
+          .status(500)
+          .json({ error: "Propiedad creada pero fallo al guardar imágenes" });
+      }
     }
   });
 };
@@ -161,22 +162,21 @@ const actualizarPropiedad = async (req, res) => {
     } catch (e) {
       console.error(e);
     }
-    await Promise.all(
-      urls.map((url, index) =>
-        new Promise((resolve, reject) => {
+    try {
+      for (const [index, url] of urls.entries()) {
+        await new Promise((resolve, reject) => {
           ImagenPropiedad.agregarImagen(
             id,
             url,
             datosActualizados.titulo || "",
             offset + index,
-            (imgErr) => {
-              if (imgErr) reject(imgErr);
-              else resolve();
-            }
+            (imgErr) => (imgErr ? reject(imgErr) : resolve())
           );
-        })
-      )
-    ).catch((e) => console.error(e));
+        });
+      }
+    } catch (imgErr) {
+      console.error(imgErr);
+    }
   }
 
   Propiedad.actualizarPropiedad(id, datosActualizados, (err, resultado) => {
