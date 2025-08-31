@@ -26,6 +26,9 @@ function AdminPanel() {
     descripcion: "",
     precio: "",
     ciudad: "",
+    direccion: "",
+    provincia: "",
+    tipo: "",
     ambientes: "",
     banos: "",
     cochera: "",
@@ -85,6 +88,9 @@ function AdminPanel() {
           descripcion: "",
           precio: "",
           ciudad: "",
+          direccion: "",
+          provincia: "",
+          tipo: "",
           ambientes: "",
           banos: "",
           cochera: "",
@@ -241,6 +247,40 @@ function AdminPanel() {
                 required
                 value={nueva.ciudad}
                 onChange={(e) => setNueva({ ...nueva, ciudad: e.target.value })}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Dirección"
+                name="direccion"
+                fullWidth
+                required
+                value={nueva.direccion}
+                onChange={(e) =>
+                  setNueva({ ...nueva, direccion: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Provincia"
+                name="provincia"
+                fullWidth
+                required
+                value={nueva.provincia}
+                onChange={(e) =>
+                  setNueva({ ...nueva, provincia: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Tipo"
+                name="tipo"
+                fullWidth
+                required
+                value={nueva.tipo}
+                onChange={(e) => setNueva({ ...nueva, tipo: e.target.value })}
               />
             </Grid>
             <Grid item xs={12}>
@@ -447,6 +487,30 @@ function AdminPanel() {
                         name="ciudad"
                         label="Ciudad"
                         value={editData.ciudad}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      <TextField
+                        fullWidth
+                        name="direccion"
+                        label="Dirección"
+                        value={editData.direccion}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      <TextField
+                        fullWidth
+                        name="provincia"
+                        label="Provincia"
+                        value={editData.provincia}
+                        onChange={handleEditChange}
+                        sx={{ mb: 1 }}
+                      />
+                      <TextField
+                        fullWidth
+                        name="tipo"
+                        label="Tipo"
+                        value={editData.tipo}
                         onChange={handleEditChange}
                         sx={{ mb: 1 }}
                       />

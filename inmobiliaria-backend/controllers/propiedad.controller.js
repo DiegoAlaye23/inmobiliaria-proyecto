@@ -58,7 +58,18 @@ const obtenerPropiedadPorId = (req, res) => {
 // Crear una nueva propiedad
 const crearPropiedad = async (req, res) => {
   // req.body contiene los datos del formulario.
-  const nuevaPropiedad = req.body;
+  const nuevaPropiedad = {
+    ...req.body,
+    precio: parseFloat(req.body.precio) || 0,
+    ambientes: parseInt(req.body.ambientes) || 0,
+    banos: parseInt(req.body.banos) || 0,
+    cochera: req.body.cochera === 'true' || req.body.cochera === true,
+    m2: parseFloat(req.body.m2) || 0,
+    tipo: req.body.tipo || '',
+    direccion: req.body.direccion || '',
+    ciudad: req.body.ciudad || '',
+    provincia: req.body.provincia || '',
+  };
   const archivos = req.files || [];
   const urls = [];
 
@@ -124,7 +135,18 @@ const actualizarPropiedad = async (req, res) => {
   // Obtiene el id desde la URL
   const id = req.params.id;
   // Recibe datos nuevos desde el frontend (req.body)
-  const datosActualizados = req.body;
+  const datosActualizados = {
+    ...req.body,
+    precio: parseFloat(req.body.precio) || 0,
+    ambientes: parseInt(req.body.ambientes) || 0,
+    banos: parseInt(req.body.banos) || 0,
+    cochera: req.body.cochera === 'true' || req.body.cochera === true,
+    m2: parseFloat(req.body.m2) || 0,
+    tipo: req.body.tipo || '',
+    direccion: req.body.direccion || '',
+    ciudad: req.body.ciudad || '',
+    provincia: req.body.provincia || '',
+  };
   const archivos = req.files || [];
   const urls = [];
 
