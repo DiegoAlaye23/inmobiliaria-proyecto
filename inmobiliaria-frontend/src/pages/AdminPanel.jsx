@@ -55,12 +55,17 @@ function AdminPanel() {
   };
 
   const handleDelete = (id) => {
-    axios
-      .delete(`https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(cargarPropiedades)
-      .catch(() => alert("Error al eliminar"));
+    if (window.confirm("¿Seguro que desea eliminar esta propiedad?")) {
+      axios
+        .delete(
+          `https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then(cargarPropiedades)
+        .catch(() => alert("Error al eliminar"));
+    }
   };
 
   const handleSubmit = (e) => {
