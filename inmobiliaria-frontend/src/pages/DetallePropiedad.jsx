@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import api from "../config/axios";
+import PropertyMap from "../components/PropertyMap";
 import {
   Box,
   Typography,
@@ -23,6 +24,7 @@ function DetallePropiedad() {
   const [mensaje, setMensaje] = useState("");
   const [indiceImagen, setIndiceImagen] = useState(0);
   const [lightboxAbierto, setLightboxAbierto] = useState(false);
+  const [coords, setCoords] = useState(null);
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const puedeFavoritos = ["cliente", "usuario"].includes(usuario?.rol);
   const navigate = useNavigate();
@@ -47,6 +49,36 @@ function DetallePropiedad() {
         .catch((err) => console.error(err));
     }
   }, [puedeFavoritos, id]);
+
+  useEffect(() => {
+    if (!propiedad) return;
+
+    if (propiedad.lat && propiedad.lng) {
+      setCoords({ lat: propiedad.lat, lng: propiedad.lng });
+      return;
+    }
+    if (propiedad.latitud && propiedad.longitud) {
+      setCoords({ lat: propiedad.latitud, lng: propiedad.longitud });
+      return;
+    }
+
+    const direccionCompleta = `${propiedad.direccion}, ${propiedad.ciudad}, ${propiedad.provincia}`;
+    fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        direccionCompleta
+      )}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data[0]) {
+          setCoords({
+            lat: parseFloat(data[0].lat),
+            lng: parseFloat(data[0].lon),
+          });
+        }
+      })
+      .catch((err) => console.error("Error de geocodificación", err));
+  }, [propiedad]);
 
   const toggleFavorito = () => {
     if (!usuario) {
@@ -157,6 +189,11 @@ function DetallePropiedad() {
             <strong>Fecha de publicación:</strong>{" "}
             {new Date(propiedad.fecha_publicacion).toLocaleDateString()}
           </Typography>
+          {coords && (
+            <Box sx={{ mt: 3, height: { xs: 200, md: 300 } }}>
+              <PropertyMap lat={coords.lat} lng={coords.lng} />
+            </Box>
+          )}
 
           <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
             <Button
