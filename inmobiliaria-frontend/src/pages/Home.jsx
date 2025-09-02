@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
+import supabase from '../config/supabase';
 import {
   Box,
   Typography,
@@ -36,21 +36,27 @@ function Home() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
 
-  const fetchPropiedades = useCallback(() => {
-    const params = {};
-    if (debouncedFilters.city) params.ciudad = debouncedFilters.city;
-    if (debouncedFilters.type) params.tipo = debouncedFilters.type;
-    if (debouncedFilters.minPrice !== '') params.minPrecio = debouncedFilters.minPrice;
-    if (debouncedFilters.maxPrice !== '') params.maxPrecio = debouncedFilters.maxPrice;
+  const fetchPropiedades = useCallback(async () => {
+    let query = supabase.from('propiedades').select('*');
+    if (debouncedFilters.city) {
+      query = query.ilike('ciudad', `%${debouncedFilters.city}%`);
+    }
+    if (debouncedFilters.type) {
+      query = query.eq('tipo', debouncedFilters.type);
+    }
+    if (debouncedFilters.minPrice !== '') {
+      query = query.gte('precio', debouncedFilters.minPrice);
+    }
+    if (debouncedFilters.maxPrice !== '') {
+      query = query.lte('precio', debouncedFilters.maxPrice);
+    }
 
-    axios
-      .get('https://inmobiliaria-proyecto.onrender.com/api/propiedades', {
-        params
-      })
-      .then(res => {
-        setPropiedades(res.data);
-      })
-      .catch(err => console.error('Error al cargar propiedades:', err));
+    const { data, error } = await query;
+    if (error) {
+      console.error('Error al cargar propiedades:', error);
+    } else {
+      setPropiedades(data);
+    }
   }, [debouncedFilters]);
 
   useEffect(() => {
