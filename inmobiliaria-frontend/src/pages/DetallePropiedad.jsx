@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import supabase from "../config/supabase";
 import api from "../config/axios";
 import PropertyMap from "../components/PropertyMap";
 import {
@@ -8,7 +8,6 @@ import {
   Typography,
   Button,
   Card,
-  CardMedia,
   CardContent,
   CircularProgress,
   Alert,
@@ -30,13 +29,25 @@ function DetallePropiedad() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`https://inmobiliaria-proyecto.onrender.com/api/propiedades/${id}`)
-      .then((res) => setPropiedad(res.data))
-      .catch((err) => {
-        console.error(err);
+    const fetchPropiedad = async () => {
+      const { data, error: propError } = await supabase
+        .from('propiedades')
+        .select('*')
+        .eq('id', id)
+        .single();
+      if (propError) {
+        console.error(propError);
         setError("No se pudo cargar la propiedad.");
-      });
+        return;
+      }
+      const { data: imagenes } = await supabase
+        .from('property_images')
+        .select('url, alt')
+        .eq('property_id', id)
+        .order('order');
+      setPropiedad({ ...data, imagenes });
+    };
+    fetchPropiedad();
   }, [id]);
 
   useEffect(() => {
