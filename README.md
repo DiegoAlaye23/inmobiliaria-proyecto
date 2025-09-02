@@ -61,6 +61,10 @@ EMAIL_USER=tu_correo@gmail.com
 EMAIL_PASS=contraseña_app_gmail
 FRONTEND_URL=https://inmobiliariafrontend.netlify.app
 ⚠️ Asegúrate de tener habilitada la opción de "Contraseñas de aplicaciones" en Gmail.
+
+.env del frontend (crear archivo en inmobiliaria-frontend/.env)
+VITE_SUPABASE_URL=tu_url_de_supabase
+VITE_SUPABASE_ANON_KEY=tu_anon_key
 4. Ejecutar el proyecto
 Backend
 cd backend
